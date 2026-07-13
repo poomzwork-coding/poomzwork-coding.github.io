@@ -1,0 +1,2174 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เงื่อนไขและผังงาน: สมองของโปรแกรมและการออกแบบตรรกะ (V.2.8)</title>
+    <!-- Tailwind CSS for modern layout styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for premium Thai Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti for student celebration -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            font-family: 'Prompt', 'Mitr', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+        .animate-shake {
+            animation: shake 0.4s ease-in-out;
+        }
+        /* Style adjustments for smooth diagram visualization */
+        .svg-drop-shadow {
+            filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.08));
+        }
+        .svg-drop-shadow-active {
+            filter: drop-shadow(0px 4px 12px rgba(99, 102, 241, 0.35));
+        }
+        /* Improve mobile responsiveness and touch actions */
+        button, .cursor-pointer {
+            touch-action: manipulation;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+    <!-- TOP HEADER -->
+    <header class="bg-white shadow-sm border-b border-indigo-100 py-4 px-6 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 text-white p-2 rounded-xl shadow-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg text-slate-800 leading-tight">เงื่อนไขและผังงาน (Condition & Flowchart)</h1>
+                    <p class="text-xs text-indigo-600 font-semibold">สมองของโปรแกรมและการออกแบบตรรกะ (Auto-submit V.2.8)</p>
+                </div>
+            </div>
+            
+            <!-- Student card info badge -->
+            <div id="studentBadge" class="hidden bg-indigo-50 border border-indigo-100 rounded-full py-1.5 px-4 text-xs sm:text-sm text-indigo-800 flex items-center gap-2">
+                <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span id="badgeText" class="font-medium">นักเรียน: กำลังลงทะเบียน...</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTENT WRAPPER -->
+    <main class="flex-grow max-w-6xl w-full mx-auto p-4 sm:p-6 flex flex-col justify-center items-center">
+
+        <!-- PROGRESS STEPPER -->
+        <div id="progressStepper" class="w-full max-w-6xl mb-8 hidden overflow-x-auto pb-2">
+            <div class="flex items-center justify-between min-w-[600px] text-[10px] sm:text-xs font-bold text-slate-400">
+                <!-- Step 0: Learning Base -->
+                <div id="step-learning" class="flex flex-col items-center gap-1 shrink-0">
+                    <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[10px]">1</span>
+                    <span>เรียนรู้</span>
+                </div>
+                <div class="flex-grow border-t-2 border-slate-200 mx-1 -mt-4"></div>
+                <!-- Step 1: Simulator Base -->
+                <div id="step-sim" class="flex flex-col items-center gap-1 shrink-0">
+                    <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[10px]">2</span>
+                    <span class="hidden sm:inline">จำลองตรรกะ</span>
+                    <span class="sm:hidden">จำลอง</span>
+                </div>
+                <div class="flex-grow border-t-2 border-slate-200 mx-1 -mt-4"></div>
+                <!-- Step 2-6: Flowchart puzzle levels -->
+                <div id="step-g1" class="flex flex-col items-center gap-1 shrink-0">
+                    <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[10px]">3</span>
+                    <span>ด่าน 1</span>
+                </div>
+                <div class="flex-grow border-t-2 border-slate-200 mx-1 -mt-4"></div>
+                <div id="step-g2" class="flex flex-col items-center gap-1 shrink-0">
+                    <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[10px]">4</span>
+                    <span>ด่าน 2</span>
+                </div>
+                <div class="flex-grow border-t-2 border-slate-200 mx-1 -mt-4"></div>
+                <div id="step-g3" class="flex flex-col items-center gap-1 shrink-0">
+                    <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[10px]">5</span>
+                    <span>ด่าน 3</span>
+                </div>
+                <div class="flex-grow border-t-2 border-slate-200 mx-1 -mt-4"></div>
+                <div id="step-g4" class="flex flex-col items-center gap-1 shrink-0">
+                    <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[10px]">6</span>
+                    <span>ด่าน 4</span>
+                </div>
+                <div class="flex-grow border-t-2 border-slate-200 mx-1 -mt-4"></div>
+                <div id="step-g5" class="flex flex-col items-center gap-1 shrink-0">
+                    <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[10px]">7</span>
+                    <span>ด่าน 5</span>
+                </div>
+                <div class="flex-grow border-t-2 border-slate-200 mx-1 -mt-4"></div>
+                <!-- Step 7: Trivia Quiz -->
+                <div id="step-quiz" class="flex flex-col items-center gap-1 shrink-0">
+                    <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[10px]">8</span>
+                    <span>ควิซ</span>
+                </div>
+                <div class="flex-grow border-t-2 border-slate-200 mx-1 -mt-4"></div>
+                <!-- Step 8: Final Summary -->
+                <div id="step-summary" class="flex flex-col items-center gap-1 shrink-0">
+                    <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[10px]">9</span>
+                    <span>สรุปผล</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 1: REGISTER SCREEN -->
+        <section id="screen-register" class="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden transform transition duration-500 hover:shadow-2xl">
+            <div class="bg-gradient-to-r from-indigo-600 to-blue-600 p-6 text-white text-center">
+                <h2 class="text-2xl font-bold mb-2">ยินดีต้อนรับสู่ห้องแล็บตรรกะ!</h2>
+                <p class="text-indigo-100 text-sm">ป้อนข้อมูลของตัวนักเรียนเพื่อเริ่มต้นกิจกรรมความสนุกได้ทันที</p>
+            </div>
+            <form id="regForm" onsubmit="handleRegistration(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-slate-700 text-sm font-semibold mb-1" for="prefix">คำนำหน้าชื่อ</label>
+                    <select id="prefix" required class="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-slate-700 bg-white">
+                        <option value="" disabled selected>เลือกคำนำหน้า</option>
+                        <option value="เด็กชาย">เด็กชาย</option>
+                        <option value="เด็กหญิง">เด็กหญิง</option>
+                        <option value="นาย">นาย</option>
+                        <option value="นางสาว">นางสาว</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-slate-700 text-sm font-semibold mb-1" for="firstname">ชื่อจริง</label>
+                        <input id="firstname" type="text" placeholder="สมชาย" required class="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-slate-700">
+                    </div>
+                    <div>
+                        <label class="block text-slate-700 text-sm font-semibold mb-1" for="lastname">นามสกุล</label>
+                        <input id="lastname" type="text" placeholder="ใจดี" required class="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-slate-700">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-slate-700 text-sm font-semibold mb-1" for="classroom">ระดับชั้น/ห้องเรียน</label>
+                        <input id="classroom" type="text" placeholder="ม.1/1" required class="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-slate-700">
+                    </div>
+                    <div>
+                        <label class="block text-slate-700 text-sm font-semibold mb-1" for="studentNo">เลขที่</label>
+                        <input id="studentNo" type="number" min="1" max="99" placeholder="5" required class="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-slate-700">
+                    </div>
+                </div>
+                <button type="submit" class="w-full mt-2 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-bold py-3 rounded-lg shadow-lg hover:shadow-xl transition transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2">
+                    <span>ลงทะเบียนและเข้าสู่วิชารุ่นใหม่</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </form>
+        </section>
+
+        <!-- SCREEN 1.5: LEARNING MODULE SCREEN -->
+        <section id="screen-learning" class="w-full max-w-5xl hidden flex flex-col gap-6">
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-xl border border-slate-100 space-y-4">
+                <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
+                    <span class="bg-blue-100 text-blue-800 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">ด่านเตรียมความพร้อม</span>
+                    <h2 class="text-xl sm:text-2xl font-extrabold text-slate-800">แหล่งเรียนรู้สัญลักษณ์ผังงาน (Flowchart Symbols)</h2>
+                </div>
+                <p class="text-sm text-slate-500 leading-relaxed font-medium">
+                    ก่อนที่เราจะเข้าไปลุยห้องปฏิบัติการทดลอง มาทำความรู้จักกับ <b>4 สัญลักษณ์เรขาคณิตพื้นฐาน</b> ที่เป็นหัวใจสำคัญของการเขียนผังงานเพื่อใช้สื่อสารตรรกะของโปรแกรมกันก่อน!
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                    <!-- Symbol 1: Terminal -->
+                    <div class="flex items-center gap-4 p-5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50 transition duration-300">
+                        <div class="w-24 sm:w-28 flex-shrink-0 flex justify-center">
+                             <svg viewBox="0 0 210 65" class="w-full drop-shadow-sm">
+                                <rect x="2" y="2" width="206" height="61" rx="30.5" fill="#eff6ff" stroke="#2563eb" stroke-width="3" />
+                             </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-blue-900 text-sm sm:text-base">เริ่มต้น / สิ้นสุด (Terminal)</h4>
+                            <p class="text-[11px] sm:text-xs text-slate-600 mt-1 leading-relaxed">ใช้แสดงจุดเริ่มต้นแรกและจุดสิ้นสุดของโปรแกรมเสมอ (มีเพียง 1 จุดเริ่มและ 1 จุดจบเท่านั้น)</p>
+                        </div>
+                    </div>
+
+                    <!-- Symbol 2: Process -->
+                    <div class="flex items-center gap-4 p-5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-emerald-50 transition duration-300">
+                        <div class="w-24 sm:w-28 flex-shrink-0 flex justify-center">
+                            <svg viewBox="0 0 210 65" class="w-full drop-shadow-sm">
+                                <rect x="2" y="2" width="206" height="61" fill="#ecfdf5" stroke="#059669" stroke-width="3" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-emerald-900 text-sm sm:text-base">ประมวลผล (Process)</h4>
+                            <p class="text-[11px] sm:text-xs text-slate-600 mt-1 leading-relaxed">ใช้สำหรับการคำนวณ กำหนดค่าตัวแปร หรือสั่งให้โปรแกรมทำงานและเปลี่ยนแปลงข้อมูล</p>
+                        </div>
+                    </div>
+
+                    <!-- Symbol 3: Decision -->
+                    <div class="flex items-center gap-4 p-5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-amber-50 transition duration-300">
+                        <div class="w-24 sm:w-28 flex-shrink-0 flex justify-center">
+                            <svg viewBox="0 0 135 135" class="w-16 h-16 drop-shadow-sm">
+                                <polygon points="67.5,3.5 131.5,67.5 67.5,131.5 3.5,67.5" fill="#fffbeb" stroke="#d97706" stroke-width="4" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-amber-900 text-sm sm:text-base">การตัดสินใจ (Decision)</h4>
+                            <p class="text-[11px] sm:text-xs text-slate-600 mt-1 leading-relaxed">ใช้ตรวจสอบเงื่อนไข ซึ่งจะมีลูกศรทางแยกออกไป 2 ทางเสมอ คือสาย <b>ใช่ (True)</b> และ <b>ไม่ใช่ (False)</b></p>
+                        </div>
+                    </div>
+
+                    <!-- Symbol 4: Input/Output -->
+                    <div class="flex items-center gap-4 p-5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-indigo-50 transition duration-300">
+                        <div class="w-24 sm:w-28 flex-shrink-0 flex justify-center">
+                            <svg viewBox="0 0 210 65" class="w-full drop-shadow-sm">
+                                <polygon points="26,2 208,2 184,63 2,63" fill="#f5f3ff" stroke="#4f46e5" stroke-width="3" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-indigo-900 text-sm sm:text-base">รับข้อมูล / แสดงผล (I/O)</h4>
+                            <p class="text-[11px] sm:text-xs text-slate-600 mt-1 leading-relaxed">ใช้รับค่าข้อมูลจากผู้ใช้งาน หรือรับหน้าที่แสดงผลลัพธ์ออกทางหน้าจอ</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex justify-between items-center pt-5 border-t border-slate-100">
+                    <button onclick="goBack()" class="text-xs sm:text-sm text-slate-500 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 px-5 py-3 rounded-lg font-bold transition flex items-center gap-1.5 shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                        ย้อนกลับไปแก้ไขชื่อ
+                    </button>
+                    <button onclick="goToSimulator()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 sm:px-8 rounded-lg text-xs sm:text-sm shadow-md transition flex items-center gap-2">
+                        <span>เข้าใจแล้ว! ไปทดลองเครื่องจำลองกัน</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCREEN 2: INTERACTIVE MONSTER SIMULATOR LAB -->
+        <section id="screen-sim" class="w-full max-w-5xl hidden flex flex-col gap-6">
+            <div class="bg-white p-5 rounded-2xl shadow-md border border-slate-100 space-y-3">
+                <div class="flex items-center gap-2">
+                    <span class="bg-rose-100 text-rose-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase">กิจกรรมปฏิสัมพันธ์ที่ 1</span>
+                    <h2 class="text-xl sm:text-2xl font-extrabold text-slate-800">เครื่องคัดแยกสายพันธุ์มอนสเตอร์จำลอง (Monster Classifier Simulator)</h2>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-500 leading-relaxed">
+                    "โครงสร้างเงื่อนไข (Selection) คือหัวใจของการคิดประมวลผล" ทดลองคลิกปรับปุ่มสวิตช์จำลอง (Toggle Switches) ด้านซ้ายเพื่อกำหนดคุณลักษณะ
+                    แล้วสังเกต **แนวแสงไฟจำลองตรรกะที่สว่างวาบเรืองรองผ่านผังงานจริง** ด้านขวา เพื่อตรวจกระบวนการตัดสินใจแยกกิ่ง Yes / No จนตกตะกอนออกมาเป็นประเภทมอนสเตอร์!
+                </p>
+            </div>
+
+            <!-- Simulator interactive core grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+                <!-- Left Control Switches Panel -->
+                <div class="lg:col-span-4 bg-white p-5 rounded-2xl shadow-md border border-slate-100 flex flex-col justify-between gap-5">
+                    <div class="space-y-4">
+                        <h3 class="font-bold text-slate-700 border-b border-slate-100 pb-2 text-sm flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+                            ปรับตั้งลักษณะมอนสเตอร์
+                        </h3>
+
+                        <!-- Toggle 1: Has Wings -->
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 flex items-center justify-between">
+                            <div>
+                                <h4 class="font-bold text-xs sm:text-sm text-slate-800">สวิตช์ A: มีปีกพับได้</h4>
+                                <p class="text-[10px] text-slate-400">ตรวจสอบสำหรับเผ่าเวหา</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="sim-wings" class="sr-only peer" onchange="runMonsterSimulation()">
+                                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                            </label>
+                        </div>
+
+                        <!-- Toggle 2: Can Breathe Fire / Magic -->
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 flex items-center justify-between">
+                            <div>
+                                <h4 class="font-bold text-xs sm:text-sm text-slate-800">สวิตช์ B: พ่นไฟร้อนแรง</h4>
+                                <p class="text-[10px] text-slate-400">แยกแยะระหว่างธาตุร้อนและเย็น</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="sim-fire" class="sr-only peer" onchange="runMonsterSimulation()">
+                                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+                            </label>
+                        </div>
+
+                        <!-- Toggle 3: Is Giant -->
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 flex items-center justify-between">
+                            <div>
+                                <h4 class="font-bold text-xs sm:text-sm text-slate-800">สวิตช์ C: ขนาดร่างกายยักษ์</h4>
+                                <p class="text-[10px] text-slate-400">จำแนกระดับน้ำหนักมวลสาร</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="sim-giant" class="sr-only peer" onchange="runMonsterSimulation()">
+                                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Center Simulator Flowchart Visualization Panel -->
+                <div class="lg:col-span-5 bg-white p-5 rounded-2xl shadow-md border border-slate-100 flex flex-col items-center gap-1.5 relative overflow-hidden">
+                    <h3 class="font-bold text-slate-700 border-b border-slate-100 pb-2 text-sm w-full text-center flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                        เส้นทางการไหลทางตรรกะ (Active Flowchart)
+                    </h3>
+
+                    <!-- SVG-based flow map elements to ensure precise flowchart geometry shapes -->
+                    <div class="w-full flex flex-col items-center gap-1 text-[11px] sm:text-xs">
+                        
+                        <!-- Terminal: Start -->
+                        <div id="sim-path-start" class="transition duration-300 transform scale-90">
+                            <!-- SVG Oval / Terminal -->
+                            <svg viewBox="0 0 160 46" class="w-36 h-10 svg-drop-shadow">
+                                <rect x="2" y="2" width="156" height="42" rx="21" fill="#eff6ff" stroke="#3b82f6" stroke-width="2" />
+                                <foreignObject x="10" y="4" width="140" height="38">
+                                    <div class="h-full w-full flex items-center justify-center text-center text-[11px] font-bold text-blue-900">เริ่มต้น (START)</div>
+                                </foreignObject>
+                            </svg>
+                        </div>
+
+                        <!-- Arrow 1 -->
+                        <div id="sim-arrow-1" class="text-slate-300 text-center font-bold text-sm leading-none transition duration-300">↓</div>
+
+                        <!-- Decision A: Has Wings? -->
+                        <div id="sim-path-wings" class="transition duration-300 transform scale-95">
+                            <!-- SVG Diamond / Decision -->
+                            <svg viewBox="0 0 120 120" class="w-24 h-24 svg-drop-shadow">
+                                <polygon points="60,2 118,60 60,118 2,60" fill="#fffbeb" stroke="#d97706" stroke-width="2" />
+                                <foreignObject x="14" y="14" width="92" height="92">
+                                    <div class="h-full w-full flex items-center justify-center text-center text-[10px] font-bold text-amber-950 leading-tight">เงื่อนไข A:<br>มีปีกบินได้?</div>
+                                </foreignObject>
+                            </svg>
+                        </div>
+
+                        <!-- Bifurcation branching -->
+                        <div class="w-full grid grid-cols-2 gap-2 mt-1 relative">
+                            <!-- Left Wing Branch (Yes) -->
+                            <div class="flex flex-col items-center border-r border-dashed border-slate-200 pr-1">
+                                <div id="sim-val-wings-yes" class="text-[9px] font-bold text-slate-400 mb-1 transition duration-300">ใช่ (YES) ↓</div>
+                                
+                                <!-- Decision B: Breathe Fire? -->
+                                <div id="sim-path-fire" class="transition duration-300 transform scale-90">
+                                    <svg viewBox="0 0 120 120" class="w-20 h-20 svg-drop-shadow">
+                                        <polygon points="60,2 118,60 60,118 2,60" fill="#fffbeb" stroke="#d97706" stroke-width="2" />
+                                        <foreignObject x="14" y="14" width="92" height="92">
+                                            <div class="h-full w-full flex items-center justify-center text-center text-[8px] font-bold text-amber-950 leading-tight">เงื่อนไข B:<br>พ่นไฟ?</div>
+                                        </foreignObject>
+                                    </svg>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-1 mt-1.5 w-full">
+                                    <div class="flex flex-col items-center">
+                                        <span id="sim-val-fire-yes" class="text-[8px] font-bold text-slate-400 mb-0.5 transition duration-300">YES ↓</span>
+                                        <!-- Process / Outcome 1 -->
+                                        <div id="sim-res-dragon" class="w-20 h-10 border border-slate-300 bg-slate-50 flex items-center justify-center text-center text-[8px] font-bold text-slate-500 shadow-sm transition duration-300">
+                                            มังกรแดงโบราณ
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-center">
+                                        <span id="sim-val-fire-no" class="text-[8px] font-bold text-slate-400 mb-0.5 transition duration-300">NO ↓</span>
+                                        <!-- Process / Outcome 2 -->
+                                        <div id="sim-res-phoenix" class="w-20 h-10 border border-slate-300 bg-slate-50 flex items-center justify-center text-center text-[8px] font-bold text-slate-500 shadow-sm transition duration-300">
+                                            นกฟีนิกซ์เวหา
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Wing Branch (No) -->
+                            <div class="flex flex-col items-center pl-1">
+                                <div id="sim-val-wings-no" class="text-[9px] font-bold text-slate-400 mb-1 transition duration-300">ไม่ใช่ (NO) ↓</div>
+                                
+                                <!-- Decision C: Is Giant? -->
+                                <div id="sim-path-giant" class="transition duration-300 transform scale-90">
+                                    <svg viewBox="0 0 120 120" class="w-20 h-20 svg-drop-shadow">
+                                        <polygon points="60,2 118,60 60,118 2,60" fill="#fffbeb" stroke="#d97706" stroke-width="2" />
+                                        <foreignObject x="14" y="14" width="92" height="92">
+                                            <div class="h-full w-full flex items-center justify-center text-center text-[8px] font-bold text-amber-950 leading-tight">เงื่อนไข C:<br>ยักษ์ใหญ่?</div>
+                                        </foreignObject>
+                                    </svg>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-1 mt-1.5 w-full">
+                                    <div class="flex flex-col items-center">
+                                        <span id="sim-val-giant-yes" class="text-[8px] font-bold text-slate-400 mb-0.5 transition duration-300">YES ↓</span>
+                                        <!-- Process / Outcome 3 -->
+                                        <div id="sim-res-golem" class="w-20 h-10 border border-slate-300 bg-slate-50 flex items-center justify-center text-center text-[8px] font-bold text-slate-500 shadow-sm transition duration-300">
+                                            โกเลมหินผา
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-center">
+                                        <span id="sim-val-giant-no" class="text-[8px] font-bold text-slate-400 mb-0.5 transition duration-300">NO ↓</span>
+                                        <!-- Process / Outcome 4 -->
+                                        <div id="sim-res-slime" class="w-20 h-10 border border-slate-300 bg-slate-50 flex items-center justify-center text-center text-[8px] font-bold text-slate-500 shadow-sm transition duration-300">
+                                            สไลม์วารีซน
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Right Live Outcome Display Panel -->
+                <div class="lg:col-span-3 bg-gradient-to-b from-indigo-900 to-slate-900 text-white p-5 rounded-2xl shadow-md flex flex-col justify-between text-center relative overflow-hidden min-h-[300px]">
+                    <span class="text-[10px] uppercase font-bold tracking-wider text-indigo-300">ผลลัพธ์จากเส้นทางสายตรง</span>
+                    
+                    <div class="my-6 space-y-4">
+                        <div id="monster-avatar" class="text-6xl sm:text-7xl animate-bounce">🦖</div>
+                        <div>
+                            <h4 id="monster-title" class="text-lg font-bold text-amber-400">มังกรแดงโบราณ</h4>
+                            <p id="monster-desc" class="text-xs text-slate-300 leading-relaxed mt-1">มอนสเตอร์ขนาดมหึมาพ่นพลังงานทำลายล้างความร้อนสูงจากฟากฟ้า</p>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-indigo-800/60 pt-3 flex flex-col gap-1.5">
+                        <span class="text-[9px] text-indigo-200">ประมวลผลลัพธ์ผ่านตรรกะสำเร็จ</span>
+                        <button onclick="startFlowchartGameScreen()" class="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-bold py-2.5 px-4 rounded-lg text-xs shadow transition flex items-center justify-center gap-1">
+                            <span>ไปต่อที่เกมแก้ตรรกะ</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Back navigation for Simulator -->
+            <div class="flex justify-start">
+                <button onclick="goBack()" class="text-xs sm:text-sm text-slate-500 hover:text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 px-5 py-2.5 rounded-lg font-bold transition flex items-center gap-1.5 shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    ย้อนกลับไปแหล่งเรียนรู้
+                </button>
+            </div>
+        </section>
+
+        <!-- SCREEN 3: ACTIVE GAMEPLAY SCREEN (FLOWCHART BLOCK PUZZLE) -->
+        <section id="screen-game" class="w-full max-w-5xl hidden flex flex-col gap-6">
+            
+            <!-- Level and Info Bar -->
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-3">
+                <div>
+                    <span class="bg-indigo-100 text-indigo-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase">กิจกรรมปฏิสัมพันธ์ที่ 2</span>
+                    <h3 id="gameStageTitle" class="text-base sm:text-lg font-bold text-slate-800 mt-1">ด่านปัจจุบัน: 🚦 สัญญาณไฟจราจรอัจฉริยะ</h3>
+                    <p id="gameStageDesc" class="text-xs sm:text-sm text-slate-500 mt-0.5">ช่วยประกอบแผนผังการไหลตรรกะสำหรับการตัดสินใจเรื่องไฟจราจร</p>
+                </div>
+                <div class="flex items-center gap-3 text-xs sm:text-sm font-semibold">
+                    <div class="bg-indigo-50 text-indigo-700 py-1.5 px-3 rounded-lg border border-indigo-100">
+                        ด่านที่: <span id="currentLevelText" class="text-sm sm:text-base text-indigo-900 font-bold">1 / 5</span>
+                    </div>
+                    <div class="bg-emerald-50 text-emerald-700 py-1.5 px-3 rounded-lg border border-emerald-100">
+                        คะแนนด่านต่อบล็อก: <span id="gameScoreText" class="text-sm sm:text-base text-emerald-900 font-bold">0</span> / 5
+                    </div>
+                </div>
+            </div>
+
+            <!-- Puzzle Grid layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                
+                <!-- Left panel: Blocks available to choose (Block Pool) -->
+                <div class="lg:col-span-5 bg-white p-5 rounded-2xl shadow-md border border-slate-100 flex flex-col gap-4">
+                    <div class="border-b border-slate-100 pb-2">
+                        <h4 class="font-bold text-slate-700 text-xs sm:text-sm flex items-center gap-2">
+                            <span class="inline-block w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+                            คลังสัญลักษณ์ที่กำหนดให้
+                        </h4>
+                        <p class="text-xs text-slate-400 mt-1">แตะสัญลักษณ์ด้านล่างนี้ เพื่อเพิ่มไปจัดเรียงแผนภาพด้านขวา</p>
+                    </div>
+
+                    <!-- Available blocks container -->
+                    <div id="blockPoolContainer" class="flex flex-col gap-3.5 min-h-[250px] justify-center items-center">
+                        <!-- JS injected blocks -->
+                    </div>
+                </div>
+
+                <!-- Right panel: Flowchart constructed -->
+                <div class="lg:col-span-7 bg-white p-5 rounded-2xl shadow-md border border-slate-100 flex flex-col gap-4">
+                    <div class="border-b border-slate-100 pb-2 flex justify-between items-center">
+                        <div>
+                            <h4 class="font-bold text-slate-700 text-xs sm:text-sm flex items-center gap-2">
+                                <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                                แผนภาพผังงานของคุณ (Standard Flowchart)
+                            </h4>
+                            <p class="text-xs text-slate-400 mt-1">ตรรกะจะเคลื่อนผ่านเส้นทิศทางจากด้านบนลงมาด้านล่าง</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <!-- Hint Button (Initially locked, enabled after 1 wrong check) -->
+                            <button id="btnHint" onclick="showHint()" class="text-[10px] sm:text-xs text-amber-700 hover:text-amber-800 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1 shadow-sm">
+                                💡 ดูคำใบ้
+                            </button>
+                            <button id="btnClear" onclick="resetFlowchart()" class="text-[10px] sm:text-xs text-rose-600 hover:text-rose-700 bg-rose-50 border border-rose-100 px-3 py-1.5 rounded-lg font-medium transition flex items-center gap-1 shadow-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 110 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.005a1 1 0 01.737.824a5 5 0 009.254 1.171H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566a1 1 0 01.61-1.278z" clip-rule="evenodd" />
+                                </svg>
+                                เคลียร์บอร์ด
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Flowchart constructed workspace -->
+                    <div id="flowchartWorkspace" class="bg-slate-50 border-2 border-dashed border-slate-200 rounded-xl p-6 min-h-[400px] flex flex-col items-center justify-start gap-3 overflow-y-auto max-h-[550px]">
+                        <!-- Dynamic blocks with arrows in-between -->
+                    </div>
+
+                    <!-- Feedback message and submit button -->
+                    <div id="gameActionPanel" class="mt-2 space-y-4">
+                        <div id="verificationFeedback" class="hidden p-3.5 rounded-xl text-xs sm:text-sm font-semibold border text-center">
+                            <!-- Feedback injected here -->
+                        </div>
+
+                        <!-- Action Buttons including Back button -->
+                        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 w-full border-t border-slate-100 pt-3">
+                            <button id="btnBackStage" onclick="goBack()" class="w-full sm:w-auto text-xs sm:text-sm text-slate-500 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 px-4 py-2.5 rounded-lg font-bold transition flex justify-center items-center gap-1.5 shadow-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                                </svg>
+                                ย้อนกลับ
+                            </button>
+                            <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                                <span class="hidden md:inline text-[10px] text-slate-400 italic mr-2">ตรวจความเชื่อมโยงก่อนกดตรวจสอบ</span>
+                                <button id="btnCheckAnswer" onclick="checkCurrentAnswer()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-6 rounded-lg text-xs sm:text-sm shadow-md transition flex items-center justify-center w-full sm:w-auto gap-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 sm:h-5 w-4 sm:w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                    </svg>
+                                    ตรวจสอบ
+                                </button>
+                                <button id="btnNextStage" onclick="goToNextLevel()" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-6 rounded-lg text-xs sm:text-sm shadow-md transition flex items-center justify-center w-full sm:w-auto gap-1">
+                                    <span>ไปต่อ</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 sm:h-5 w-4 sm:w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCREEN 4: TRIVIA MULTIPLE CHOICE QUIZ -->
+        <section id="screen-quiz" class="w-full max-w-3xl bg-white rounded-2xl shadow-xl border border-slate-100 p-6 sm:p-8 hidden space-y-6">
+            <div class="border-b border-slate-100 pb-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+                <div>
+                    <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase">กิจกรรมปฏิสัมพันธ์ที่ 3</span>
+                    <h2 class="text-xl font-bold text-slate-800 mt-1">🧠 สมรภูมิควิซลบจุดบกพร่องตรรกะ</h2>
+                    <p class="text-xs text-slate-400 mt-0.5">ตอบแบบประเมินความรู้แก้สมมติฐานและกรองสัญลักษณ์</p>
+                </div>
+                <div class="flex items-center gap-2 text-xs sm:text-sm">
+                    <span class="bg-amber-50 text-amber-700 py-1.5 px-3 rounded-lg border border-amber-100 font-semibold">
+                        คำถามข้อที่: <span id="quizIndexText" class="text-sm sm:text-base font-bold">1 / 10</span>
+                    </span>
+                    <span class="bg-emerald-50 text-emerald-700 py-1.5 px-3 rounded-lg border border-emerald-100 font-semibold">
+                        คะแนนควิซ: <span id="quizScoreText" class="text-sm sm:text-base font-bold text-emerald-950">0</span> / 5
+                    </span>
+                </div>
+            </div>
+
+            <!-- Quiz Question Card Container -->
+            <div class="space-y-4">
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
+                    <p id="quizQuestionText" class="font-bold text-slate-800 text-sm sm:text-base leading-relaxed">คำถามจะเรนเดอร์ในข้อนี้...</p>
+                </div>
+
+                <!-- 4 Options Grid -->
+                <div id="quizOptionsContainer" class="grid grid-cols-1 gap-3.5">
+                    <!-- Dynamic injected options -->
+                </div>
+            </div>
+
+            <!-- Quiz Action Feedback Overlay -->
+            <div id="quizFeedbackPanel" class="hidden p-4 rounded-xl text-xs sm:text-sm font-semibold border flex items-start gap-3 animate-pulse">
+                <div id="quizFeedbackIcon" class="p-2 bg-white rounded-lg shadow-sm"></div>
+                <div>
+                    <h4 id="quizFeedbackTitle" class="font-bold text-sm">เฉลยข้อมูล</h4>
+                    <p id="quizFeedbackDesc" class="font-medium text-xs mt-0.5 leading-relaxed">คำอธิบายเพื่อเพิ่มพูนกระบวนการคิดวิเคราะห์เชิงคำนวณ</p>
+                </div>
+            </div>
+
+            <!-- Quiz Navigation -->
+            <div class="flex justify-between items-center pt-2">
+                <button id="btnBackQuiz" onclick="goBack()" class="text-xs sm:text-sm text-slate-500 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 px-4 py-2.5 rounded-lg font-bold transition flex items-center gap-1.5 shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    ย้อนกลับ
+                </button>
+                <button id="btnNextQuiz" onclick="advanceQuiz()" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-6 rounded-lg text-sm shadow-md transition flex items-center gap-1">
+                    <span>ตกลงและไปต่อ</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- SCREEN 5: COMPREHENSIVE SUMMARY & SHEET STORAGE -->
+        <section id="screen-summary" class="w-full max-w-4xl hidden space-y-8">
+            
+            <!-- Overall scorecard layout -->
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-6 sm:p-8 text-center space-y-5">
+                <div class="inline-flex p-4 rounded-full bg-emerald-100 text-emerald-600 animate-bounce mb-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-800">🎉 บรรลุหลักสูตรตรรกะผังงานสำเร็จแล้ว! 🎉</h2>
+                <p class="text-slate-500 max-w-xl mx-auto text-xs sm:text-sm leading-relaxed">
+                    เธอผ่านทุกด่านและภารกิจการท้าทายตรรกศาสตร์ ทั้งเครื่องจำลองการแยกมอนสเตอร์ บอร์ดประกอบรูปสัญลักษณ์ และแบบประเมินมินิข้อสอบ มารายงานสรุปส่งผลสอบกันเลย!
+                </p>
+
+                <!-- Detailed Breakdown scoreboards -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto">
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-center">
+                        <span class="text-[10px] text-slate-400 font-bold block uppercase">คะแนนด่านต่อบล็อก</span>
+                        <span id="summaryPuzzleScore" class="text-2xl font-bold text-indigo-600">5 / 5</span>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-center">
+                        <span class="text-[10px] text-slate-400 font-bold block uppercase">คะแนนประเมินควิซ</span>
+                        <span id="summaryQuizScore" class="text-2xl font-bold text-amber-500">5 / 5</span>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-950 rounded-xl p-3 text-center text-white">
+                        <span class="text-[10px] text-slate-400 font-bold block uppercase">คะแนนรวมทั้งหมด</span>
+                        <span id="summaryTotalScore" class="text-2xl font-extrabold text-emerald-400">10 / 10</span>
+                    </div>
+                </div>
+
+                <!-- Score Widget in summary -->
+                <div class="max-w-xs mx-auto bg-slate-50 border border-slate-150 rounded-2xl p-5 shadow-inner space-y-1">
+                    <span class="text-xs uppercase font-semibold text-slate-400">ผลการเรียนรวมสะสม</span>
+                    <p class="text-4xl font-extrabold text-indigo-600" id="finalScoreDisplay">10 / 10 คะแนน</p>
+                </div>
+
+                <!-- Info Student label -->
+                <div class="text-xs text-slate-500 font-semibold" id="finalNameDisplay">
+                    เด็กชาย สมชาย ใจดี ม.1/1 เลขที่ 5
+                </div>
+
+                <!-- Cloud Spreadsheet database integration area -->
+                <div class="max-w-lg mx-auto bg-slate-50 p-4 sm:p-6 rounded-xl border border-slate-200 space-y-4 text-center">
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-semibold text-indigo-700 flex items-center justify-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                        📡 จัดส่งฐานข้อมูลเข้า Google Sheet อัตโนมัติเรียบร้อยแล้ว
+                    </p>
+                    <p class="text-[11px] text-slate-400 leading-relaxed">
+                        คะแนนสอบและข้อมูลผู้เรียนของนักเรียนได้จัดส่งตรงไปยังคลังผลงานของคุณครูทันทีหลังทำครบทุกด่าน
+                    </p>
+                </div>
+            </div>
+
+            <!-- Toast alert box -->
+            <div id="summaryToast" class="hidden p-4 rounded-xl border font-semibold text-center text-xs sm:text-sm transition animate-pulse"></div>
+
+            <!-- 4 Rules Cards -->
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-6 sm:p-8 space-y-6">
+                <div class="text-center space-y-1 border-b border-slate-100 pb-4">
+                    <h3 class="text-lg sm:text-xl font-bold text-slate-800 flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 sm:h-6 w-5 sm:w-6 text-amber-500 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                        💡 4 กฎเหล็กของการเขียนเงื่อนไขที่ดี
+                    </h3>
+                    <p class="text-[11px] sm:text-xs text-slate-500">จำชุดทฤษฎีสากลนี้เพื่อส่งเสริมขีดความสามารถการพัฒนาโครงข่ายโปรแกรมมิ่ง!</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs sm:text-sm">
+                    <!-- Rule 1 -->
+                    <div class="flex gap-4 p-3 rounded-lg hover:bg-slate-50 transition duration-200">
+                        <div class="bg-indigo-50 border border-indigo-100 rounded-lg p-3 w-10 h-10 flex items-center justify-center font-bold text-indigo-700 text-base flex-shrink-0">
+                            1
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800">วาดผังงานก่อนเขียนโค้ดเสมอ</h4>
+                            <p class="text-[11px] text-slate-500 leading-relaxed mt-1">
+                                ช่วยจัดเรียงและสแกนตรรกะในหัวก่อนถอดแบบเขียนโปรแกรม ป้องกันความคลาดเคลื่อนทางเงื่อนไข
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Rule 2 -->
+                    <div class="flex gap-4 p-3 rounded-lg hover:bg-slate-50 transition duration-200">
+                        <div class="bg-indigo-50 border border-indigo-100 rounded-lg p-3 w-10 h-10 flex items-center justify-center font-bold text-indigo-700 text-base flex-shrink-0">
+                            2
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800">ตรวจเช็กกรณีค่าขอบ (Edge Case)</h4>
+                            <p class="text-[11px] text-slate-500 leading-relaxed mt-1">
+                                คอยดักจับและกรองกรณีที่ข้อมูลสุดโต่ง เช่น คะแนนเป็น 0, อายุน้อยกว่าศูนย์, หรือการป้อนค่าข้อมูลผิดพลาด
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Rule 3 -->
+                    <div class="flex gap-4 p-3 rounded-lg hover:bg-slate-50 transition duration-200">
+                        <div class="bg-indigo-50 border border-indigo-100 rounded-lg p-3 w-10 h-10 flex items-center justify-center font-bold text-indigo-700 text-base flex-shrink-0">
+                            3
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800">หลีกเลี่ยงเงื่อนไขซ้อนกันเกิน 3 ชั้น</h4>
+                            <p class="text-[11px] text-slate-500 leading-relaxed mt-1">
+                                การ Nesting เงื่อนไขลึกเกิน 3 ระดับทำให้โค้ดสับสนและบำรุงรักษาได้ยากมาก ควรแยกเป็นตรรกะแบบกระจายหรือใช้ Logical Operators แทน
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Rule 4 -->
+                    <div class="flex gap-4 p-3 rounded-lg hover:bg-slate-50 transition duration-200">
+                        <div class="bg-indigo-50 border border-indigo-100 rounded-lg p-3 w-10 h-10 flex items-center justify-center font-bold text-indigo-700 text-base flex-shrink-0">
+                            4
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800">ทดสอบเส้นทางการรันทั้ง Yes และ No</h4>
+                            <p class="text-[11px] text-slate-500 leading-relaxed mt-1">
+                                ต้องเขียน Test-case ทดสอบทั้งฝั่งที่เป็นจริงและเงื่อนไขทางผ่านเป็นเท็จให้ครบถ้วน เพื่อการันตีความปลอดภัย
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center pt-4 border-t border-slate-100">
+                    <button onclick="restartEntireLab()" class="bg-indigo-50 border border-indigo-200 text-indigo-700 hover:bg-indigo-100 py-2 px-6 rounded-lg font-bold transition inline-flex items-center gap-1.5 text-xs sm:text-sm animate-pulse">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 15.19M13 12.3V13m0 0v1.5m0-1.5h1.5m-1.5 0H11" />
+                        </svg>
+                        สุ่มด่านรอบใหม่และประเมินผลอีกครั้ง
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- SYNTH SOUNDS & LOGIC JAVASCRIPT -->
+    <script>
+        // WEB AUDIO API SOUND SYSTEM
+        let audioCtx = null;
+        function playSynthSound(type) {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (type === 'success') {
+                    osc.type = 'triangle';
+                    const now = audioCtx.currentTime;
+                    osc.frequency.setValueAtTime(523.25, now); // C5
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+                    osc.start(now);
+                    osc.stop(now + 0.4);
+
+                    setTimeout(() => {
+                        const osc2 = audioCtx.createOscillator();
+                        const gain2 = audioCtx.createGain();
+                        osc2.connect(gain2);
+                        gain2.connect(audioCtx.destination);
+                        osc2.type = 'triangle';
+                        const now2 = audioCtx.currentTime;
+                        osc2.frequency.setValueAtTime(659.25, now2); // E5
+                        gain2.gain.setValueAtTime(0.08, now2);
+                        gain2.gain.exponentialRampToValueAtTime(0.01, now2 + 0.35);
+                        osc2.start(now2);
+                        osc2.stop(now2 + 0.4);
+                    }, 80);
+                } else if (type === 'incorrect') {
+                    osc.type = 'sawtooth';
+                    const now = audioCtx.currentTime;
+                    osc.frequency.setValueAtTime(140, now);
+                    osc.frequency.linearRampToValueAtTime(70, now + 0.35);
+                    gain.gain.setValueAtTime(0.12, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
+                    osc.start(now);
+                    osc.stop(now + 0.4);
+                } else if (type === 'click') {
+                    osc.type = 'sine';
+                    const now = audioCtx.currentTime;
+                    osc.frequency.setValueAtTime(750, now);
+                    gain.gain.setValueAtTime(0.05, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + 0.08);
+                    osc.start(now);
+                    osc.stop(now + 0.1);
+                }
+            } catch (err) {
+                console.warn('Audio context deferred:', err);
+            }
+        }
+
+        // --- HARDCODED GOOGLE APPS SCRIPT API ENDPOINT ---
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyAzo29cLwKV5c5r79b6mOrsRi-xtR8UnVblbHHXqA9d8uHwliMOh8Ruzvfqtve4XZPHw/exec";
+
+        // --- SCORE TRACKING ARRAYS (For robust Back navigation) ---
+        let levelScores = [0, 0, 0, 0, 0];
+        let quizScores = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+        // --- CORE STATES ---
+        let studentInfo = { prefix: "", firstname: "", lastname: "", classroom: "", studentNo: "" };
+        let currentLevelIndex = 0; 
+        let puzzleTotalScore = 0;
+        let quizTotalScore = 0;
+        let selectedScenarios = []; 
+        let selectedQuizQuestions = [];
+        let currentWorkspaceBlocks = []; 
+        let currentPoolBlocks = []; 
+        
+        let stageHintUsed = false;
+        let stageAttempts = 0;
+
+        // --- SCORE UPDATER ---
+        function updateScoreDisplay() {
+            puzzleTotalScore = levelScores.reduce((a, b) => a + b, 0);
+            quizTotalScore = quizScores.reduce((a, b) => a + b, 0);
+            
+            const elGame = document.getElementById('gameScoreText');
+            if (elGame) elGame.textContent = puzzleTotalScore;
+            
+            const elQuiz = document.getElementById('quizScoreText');
+            if (elQuiz) elQuiz.textContent = quizTotalScore;
+        }
+
+        // THE 10 PRE-DEFINED SCENARIOS FOR COMPOSING DIAGRAMS [WITH UNIQUE GUIDING HINTS]
+        const ALL_SCENARIOS = [
+            {
+                id: 1,
+                title: "🚦 สัญญาณไฟจราจรอัจฉริยะ",
+                description: "ช่วยเขียนตรรกะควบคุมไฟสัญญาณทางแยก: ถ้าสัญญาณไฟเป็นไฟแดงให้หยุดรถ หากไม่ใช่ (เช่นเป็นไฟเขียว) ให้ขับผ่านไปได้",
+                blocks: [
+                    { id: "s1_start", type: "terminal", text: "เริ่มต้น" },
+                    { id: "s1_dec", type: "decision", text: "ตรวจไฟสัญญาณ: เป็นไฟแดงใช่ไหม?" },
+                    { id: "s1_yes", type: "action", text: "ใช่ -> หยุดรถ" },
+                    { id: "s1_no", type: "action", text: "ไม่ใช่ -> ผ่านไป" },
+                    { id: "s1_end", type: "terminal", text: "สิ้นสุด" }
+                ],
+                hint: "ผังงานชุดนี้ประกอบด้วย: [เริ่มต้น] ➔ [สี่เหลี่ยมข้าวหลามตัด (ตัดสินใจไฟแดง)] ➔ [ใช่ -> หยุดรถ] และ [ไม่ใช่ -> ผ่านไป] เป็นกล่องสี่เหลี่ยมผืนผ้าสีเขียว ➔ [สิ้นสุด]",
+                validate: (seq) => {
+                    if (seq.length !== 5) return false;
+                    if (seq[0].id !== "s1_start") return false;
+                    if (seq[1].id !== "s1_dec") return false;
+                    const pos3 = seq[2].id;
+                    const pos4 = seq[3].id;
+                    if (!((pos3 === "s1_yes" && pos4 === "s1_no") || (pos3 === "s1_no" && pos4 === "s1_yes"))) return false;
+                    if (seq[4].id !== "s1_end") return false;
+                    return true;
+                }
+            },
+            {
+                id: 2,
+                title: "🛗 ลิฟต์โดยสารอัจฉริยะ",
+                description: "ตั้งค่าลิฟต์ให้ฉลาดขึ้น: หากเรากดจองไปชั้น 5 และไม่มีผู้โดยสารชั้นอื่นคอยขัดจังหวะ ลิฟต์จะเร่งแซงขึ้นตรงสู่ชั้นเป้าหมายทันที มิเช่นนั้นให้เปิดรับตามระบบปกติ",
+                blocks: [
+                    { id: "s2_start", type: "terminal", text: "เริ่มต้น" },
+                    { id: "s2_dec", type: "decision", text: "เงื่อนไข: ชั้น 5 + ไม่มีคิวอื่น?" },
+                    { id: "s2_yes", type: "action", text: "ใช่ -> ตรงสู่ชั้น 5 ทันที" },
+                    { id: "s2_no", type: "action", text: "ไม่ใช่ -> แวะจอดตามรอบปกติ" },
+                    { id: "s2_end", type: "terminal", text: "สิ้นสุด" }
+                ],
+                hint: "ลำดับการเดินทางของตรรกะคือ: [เริ่มต้น] ➔ [ตรวจเงื่อนไขชั้น 5 และไม่มีคิวอื่น (สีเหลือง)] ➔ [กล่อง ใช่/ไม่ใช่ (ประมวลผลสีเขียว)] ➔ [สิ้นสุด]",
+                validate: (seq) => {
+                    if (seq.length !== 5) return false;
+                    if (seq[0].id !== "s2_start") return false;
+                    if (seq[1].id !== "s2_dec") return false;
+                    const pos3 = seq[2].id;
+                    const pos4 = seq[3].id;
+                    if (!((pos3 === "s2_yes" && pos4 === "s2_no") || (pos3 === "s2_no" && pos4 === "s2_yes"))) return false;
+                    if (seq[4].id !== "s2_end") return false;
+                    return true;
+                }
+            },
+            {
+                id: 3,
+                title: "🎬 แอปสตรีมมิงวิดีโอ",
+                description: "เมื่อเปิดเล่นหนัง ระบบตรวจสอบความถูกต้องของบัญชีผู้เล่น: บัญชีหมดอายุหรือไม่? หากหมดอายุแล้วให้เปิดหน้าต่างบังคับจ่ายเงิน หากมีสิทธิ์การใช้งานให้ส่งสู่หน้าหลักของแอปพิลเคชัน",
+                blocks: [
+                    { id: "s3_start", type: "terminal", text: "เริ่มต้น" },
+                    { id: "s3_dec", type: "decision", text: "ตรวจระบบ: บัญชีผู้ใช้หมดอายุแล้ว?" },
+                    { id: "s3_yes", type: "action", text: "ใช่ -> ปรากฏหน้าชำระค่าบริการ" },
+                    { id: "s3_no", type: "action", text: "ไม่ใช่ -> นำเข้าหน้าหลักภาพยนตร์" },
+                    { id: "s3_end", type: "terminal", text: "สิ้นสุด" }
+                ],
+                hint: "เรียงตรรกะจากบนลงล่าง: [เริ่มต้น] ➔ [ตัดสินใจบัญชีหมดอายุหรือไม่] ➔ [ใช่ -> แสดงหน้าต่างจ่ายเงิน (สีเขียว)] และ [ไม่ใช่ -> เข้าหน้าภาพยนตร์ (สีเขียว)] ➔ [สิ้นสุด]",
+                validate: (seq) => {
+                    if (seq.length !== 5) return false;
+                    if (seq[0].id !== "s3_start") return false;
+                    if (seq[1].id !== "s3_dec") return false;
+                    const pos3 = seq[2].id;
+                    const pos4 = seq[3].id;
+                    if (!((pos3 === "s3_yes" && pos4 === "s3_no") || (pos3 === "s3_no" && pos4 === "s3_yes"))) return false;
+                    if (seq[4].id !== "s3_end") return false;
+                    return true;
+                }
+            },
+            {
+                id: 4,
+                title: "🔐 ประตูนิรภัยอัตโนมัติ (Case Study)",
+                description: "สร้างตรรกะระบบควบคุมประตู: รับค่ารหัส 4 หลักก่อน หากรหัสถูกต้อง ให้เปิดล็อกเป็นเวลา 5 วินาทีแล้วทำการล็อกอัตโนมัติ หากรหัสผิด ให้แจ้งเตือนพร้อมเพิ่มสถิติจำนวนครั้งที่พยายามกดผิด",
+                blocks: [
+                    { id: "s4_start", type: "terminal", text: "เริ่มต้น" },
+                    { id: "s4_input", type: "io", text: "รับรหัสผ่านตัวเลข 4 หลัก" },
+                    { id: "s4_dec", type: "decision", text: "เงื่อนไข: รหัสผ่านถูกต้อง?" },
+                    { id: "s4_yes", type: "action", text: "ใช่ -> เปิดประตู 5 วิ แล้วล็อก" },
+                    { id: "s4_no", type: "action", text: "ไม่ใช่ -> ส่งสัญญาณเตือน + นับข้อผิดพลาด" },
+                    { id: "s4_end", type: "terminal", text: "สิ้นสุด" }
+                ],
+                hint: "มีสัญลักษณ์นำเข้า (I/O) สีม่วงอยู่ด้านบน: [เริ่มต้น] ➔ [รับรหัสผ่าน (สีม่วง)] ➔ [รหัสถูกต้องหรือไม่ (สีเหลือง)] ➔ [ใช่ / ไม่ใช่ (สีเขียว)] ➔ [สิ้นสุด]",
+                validate: (seq) => {
+                    if (seq.length !== 6) return false;
+                    if (seq[0].id !== "s4_start") return false;
+                    if (seq[1].id !== "s4_input") return false;
+                    if (seq[2].id !== "s4_dec") return false;
+                    const pos4 = seq[3].id;
+                    const pos5 = seq[4].id;
+                    if (!((pos4 === "s4_yes" && pos5 === "s4_no") || (pos4 === "s4_no" && pos5 === "s4_yes"))) return false;
+                    if (seq[5].id !== "s4_end") return false;
+                    return true;
+                }
+            },
+            {
+                id: 5,
+                title: "🧺 เครื่องซักผ้าระบบควบคุมอัตโนมัติ",
+                description: "เมื่อกดปุ่มทำงาน เครื่องจะเติมน้ำเข้าถังและซักด้วยถังหมุนตามเวลาก่อน จากนั้นเช็กเงื่อนไขว่าผู้ใช้งานสั่งเพิ่มโหมดปั่นแห้งด้วยหรือไม่ หากสั่งเพิ่ม ให้สั่นเครื่องปั่นแรงๆ เพื่อรีดน้ำออก จนสิ้นสุดการทำงาน",
+                blocks: [
+                    { id: "s5_start", type: "terminal", text: "เริ่มต้น" },
+                    { id: "s5_fill", type: "action", text: "ปล่อยระดับน้ำ + ผงซักฟอกเข้าเครื่อง" },
+                    { id: "s5_wash", type: "action", text: "เริ่มกระบวนการปั่นซักรอบเวลาปกติ" },
+                    { id: "s5_dec", type: "decision", text: "เงื่อนไข: สั่งเปิดโหมดปั่นแห้งเพิ่ม?" },
+                    { id: "s5_yes", type: "action", text: "ใช่ -> เพิ่มรอบปั่นแห้งความเร็วสูง" },
+                    { id: "s5_end", type: "terminal", text: "สิ้นสุด" }
+                ],
+                hint: "ลำดับการทำงานแบบต่อเนื่อง: [เริ่มต้น] ➔ [เติมน้ำ (สีเขียว)] ➔ [ปั่นซักปกติ (สีเขียว)] ➔ [ตัดสินใจสั่งเปิดปั่นแห้ง (สีเหลือง)] ➔ [ใช่ -> ปั่นแห้ง (สีเขียว)] ➔ [สิ้นสุด]",
+                validate: (seq) => {
+                    if (seq.length !== 6) return false;
+                    if (seq[0].id !== "s5_start") return false;
+                    if (seq[1].id !== "s5_fill") return false;
+                    if (seq[2].id !== "s5_wash") return false;
+                    if (seq[3].id !== "s5_dec") return false;
+                    if (seq[4].id !== "s5_yes") return false;
+                    if (seq[5].id !== "s5_end") return false;
+                    return true;
+                }
+            },
+            {
+                id: 6,
+                title: "💻 ระบบประเมินและตัดเกรดวิชาคอมพิวเตอร์",
+                description: "คำนวณสิทธิ์ผลการเรียน: ป้อนคะแนนรวมเต็ม 100 คะแนน ตรวจสอบเกณฑ์ว่าคะแนนที่รับมาได้ตั้งแต่ 50 คะแนนขึ้นไปใช่หรือไม่ หากใช่ให้แสดงหน้ากระดาษผลลัพธ์ว่า 'ผ่าน' หากต่ำกว่า 50 คะแนนให้แสดงผลว่า 'ไม่ผ่าน'",
+                blocks: [
+                    { id: "s6_start", type: "terminal", text: "เริ่มต้น" },
+                    { id: "s6_input", type: "io", text: "นำเข้าคะแนนสอบสะสมวิชาคอมพิวเตอร์" },
+                    { id: "s6_dec", type: "decision", text: "เงื่อนไข: คะแนนรวมมากกว่า 50?" },
+                    { id: "s6_yes", type: "action", text: "ใช่ -> รายงานผลการเรียนว่า 'ผ่าน'" },
+                    { id: "s6_no", type: "action", text: "ไม่ใช่ -> รายงานผลการเรียนว่า 'ไม่ผ่าน'" },
+                    { id: "s6_end", type: "terminal", text: "สิ้นสุด" }
+                ],
+                hint: "ด่านตรวจเกณฑ์คะแนน: [เริ่มต้น] ➔ [รับคะแนนสอบ (I/O สีม่วง)] ➔ [คะแนนเกณฑ์มากกว่า 50 (สีเหลือง)] ➔ [ใช่ -> รายงานผลว่าผ่าน] และ [ไม่ใช่ -> ไม่ผ่าน] (สีเขียว) ➔ [สิ้นสุด]",
+                validate: (seq) => {
+                    if (seq.length !== 6) return false;
+                    if (seq[0].id !== "s6_start") return false;
+                    if (seq[1].id !== "s6_input") return false;
+                    if (seq[2].id !== "s6_dec") return false;
+                    const pos4 = seq[3].id;
+                    const pos5 = seq[4].id;
+                    if (!((pos4 === "s6_yes" && pos5 === "s6_no") || (pos4 === "s6_no" && pos5 === "s6_yes"))) return false;
+                    if (seq[5].id !== "s6_end") return false;
+                    return true;
+                }
+            },
+            {
+                id: 7,
+                title: "⏰ การตัดสินใจเดินทางในยามวิกาล/ยามเช้า",
+                description: "สร้างทางเลือกยามตื่นนอน: ตื่นนอนมาเช็กนาฬิกาว่าวันนี้ ตื่นนอนสายแล้วหรือยัง? หากตื่นนอนสายและรีบร้อนให้เรียกพี่วินมอเตอร์ไซค์รับจ้างด่วน หากไม่สาย ให้เลือกเดินออกกำลังกายเพื่อรับลมและเก็บออมเงินไปโรงเรียน",
+                blocks: [
+                    { id: "s7_start", type: "terminal", text: "เริ่มต้น" },
+                    { id: "s7_dec", type: "decision", text: "เงื่อนไข: เช้าวันนี้ตื่นนอนสายหรือไม่?" },
+                    { id: "s7_yes", type: "action", text: "ใช่ -> ซ้อนรถจักรยานยนต์รับจ้างด่วน" },
+                    { id: "s7_no", type: "action", text: "ไม่ใช่ -> เดินเท้าเปล่าไปโรงเรียนชิวๆ" },
+                    { id: "s7_end", type: "terminal", text: "สิ้นสุด" }
+                ],
+                hint: "การคิดสลับกิ่งทางเดิน: [เริ่มต้น] ➔ [เช็คเวลาว่าตื่นสายหรือไม่ (สีเหลือง)] ➔ [ใช่ -> นั่งวินมอเตอร์ไซค์ (สีเขียว)] และ [ไม่ใช่ -> เดินเท้าเปล่า (สีเขียว)] ➔ [สิ้นสุด]",
+                validate: (seq) => {
+                    if (seq.length !== 5) return false;
+                    if (seq[0].id !== "s7_start") return false;
+                    if (seq[1].id !== "s7_dec") return false;
+                    const pos3 = seq[2].id;
+                    const pos4 = seq[3].id;
+                    if (!((pos3 === "s7_yes" && pos4 === "s7_no") || (pos3 === "s7_no" && pos4 === "s7_yes"))) return false;
+                    if (seq[4].id !== "s7_end") return false;
+                    return true;
+                }
+            },
+            {
+                id: 8,
+                title: "🥤 ตู้จำหน่ายเครื่องดื่มหยอดเหรียญ",
+                description: "ระบบคัดแยกหยอดตู้น้ำกระป๋อง: หยอดเหรียญและคลิกเลือกเครื่องดื่ม ตู้เช็กระบบตรวจสอบว่า จำนวนเงินพอกับราคาหรือไม่? หากพอ จ่ายสินค้าพร้อมทอนเงินที่เหลือ หากน้อยเกินไป แจ้งเตือนพร้อมคืนเหรียญที่รับมาทั้งหมด",
+                blocks: [
+                    { id: "s8_start", type: "terminal", text: "เริ่มต้น" },
+                    { id: "s8_input", type: "io", text: "หยอดเหรียญและกดคลิกเลือกเมนู" },
+                    { id: "s8_dec", type: "decision", text: "เงื่อนไข: ยอดเงินหยอดเพียงพอ?" },
+                    { id: "s8_yes", type: "action", text: "ใช่ -> จ่ายน้ำพร้อมสลัดเหรียญเงินทอน" },
+                    { id: "s8_no", type: "action", text: "ไม่ใช่ -> แสดงข้อความเงินไม่พอ + คืนเหรียญ" },
+                    { id: "s8_end", type: "terminal", text: "สิ้นสุด" }
+                ],
+                hint: "ระบบหยอดเหรียญซื้อน้ำ: [เริ่มต้น] ➔ [หยอดเหรียญและกดเลือกเมนู (I/O สีม่วง)] ➔ [ตรวจสอบยอดเงินเพียงพอหรือไม่ (สีเหลือง)] ➔ [ใช่ -> จ่ายน้ำทอนเงิน / ไม่ใช่ -> คืนเหรียญ (สีเขียว)] ➔ [สิ้นสุด]",
+                validate: (seq) => {
+                    if (seq.length !== 6) return false;
+                    if (seq[0].id !== "s8_start") return false;
+                    if (seq[1].id !== "s8_input") return false;
+                    if (seq[2].id !== "s8_dec") return false;
+                    const pos4 = seq[3].id;
+                    const pos5 = seq[4].id;
+                    if (!((pos4 === "s8_yes" && pos5 === "s8_no") || (pos4 === "s8_no" && pos5 === "s8_yes"))) return false;
+                    if (seq[5].id !== "s8_end") return false;
+                    return true;
+                }
+            },
+            {
+                id: 9,
+                title: "🛡️ ระบบกรองความปลอดภัยของตัวเลอายุ",
+                description: "สร้างฟิลเตอร์สกัดกั้นค่าขอบ (Edge Case): รับข้อมูลอายุผู้กรอก ด่านตรวจเงื่อนไขมีอยู่ว่า อายุน้อยกว่า 0 หรือไม่? (ค่าติดลบมีอยู่จริงไม่ได้) หากใช่น้อยกว่า 0 ให้ส่งสัญญาณ Error ปฏิเสธการบันทึก หากถูกต้องให้เก็บบันทึกปกติ",
+                blocks: [
+                    { id: "s9_start", type: "terminal", text: "เริ่มต้น" },
+                    { id: "s9_input", type: "io", text: "กรอกเลขอายุลงฟอร์มแป้นตัวเลข" },
+                    { id: "s9_dec", type: "decision", text: "เงื่อนไข: เลขอายุน้อยกว่าศูนย์?" },
+                    { id: "s9_yes", type: "action", text: "ใช่ -> แสดงหน้าต่างเตือน ปฏิเสธ Error" },
+                    { id: "s9_no", type: "action", text: "ไม่ใช่ -> บันทึกข้อมูลและจัดเก็บปกติ" },
+                    { id: "s9_end", type: "terminal", text: "สิ้นสุด" }
+                ],
+                hint: "ดักกรองอายุติดลบ (Edge Case): [เริ่มต้น] ➔ [กรอกเลขอายุ (I/O สีม่วง)] ➔ [ตรวจอายุน้อยกว่า 0 หรือไม่ (สีเหลือง)] ➔ [ใช่ -> แสดงหน้าต่างแจ้งเตือน / ไม่ใช่ -> บันทึกข้อมูลปกติ (สีเขียว)] ➔ [สิ้นสุด]",
+                validate: (seq) => {
+                    if (seq.length !== 6) return false;
+                    if (seq[0].id !== "s9_start") return false;
+                    if (seq[1].id !== "s9_input") return false;
+                    if (seq[2].id !== "s9_dec") return false;
+                    const pos4 = seq[3].id;
+                    const pos5 = seq[4].id;
+                    if (!((pos4 === "s9_yes" && pos5 === "s9_no") || (pos4 === "s9_no" && pos5 === "s9_yes"))) return false;
+                    if (seq[5].id !== "s9_end") return false;
+                    return true;
+                }
+            },
+            {
+                id: 10,
+                title: "☕ บาริสต้าต้มชงกาแฟร้อนสูตรเด็ด",
+                description: "ขั้นตอนทำงานร้านกาแฟ: เริ่มแรกต้มน้ำร้อนให้เดือดเสียก่อน ตรวจเช็กพฤติกรรมความชอบของลูกค้าว่า ชอบกินหวานหรือไม่? หากเป็นสายรักหวาน เติมน้ำตาลหวานๆ เข้าไปลงผสมเนื้อกาแฟ หากไม่ใช่ให้ข้ามไป แล้วจึงชงผสมเสิร์ฟใส่ถ้วยกาแฟร้อนจนสิ้นสุดการทำงาน",
+                blocks: [
+                    { id: "s10_start", type: "terminal", text: "เริ่มต้น" },
+                    { id: "s10_boil", type: "action", text: "ต้มกระบอกน้ำให้มีอุณหภูมิเดือดจัด" },
+                    { id: "s10_dec", type: "decision", text: "เงื่อนไข: ลูกค้าสั่งให้แต่งรสหวาน?" },
+                    { id: "s10_yes", type: "action", text: "ใช่ -> เติมสารแต่งหวาน/น้ำตาลลงถ้วy" },
+                    { id: "s10_no", type: "action", text: "ไม่ใช่ -> ข้ามเว้นกระบวนการเติมน้ำหวาน" },
+                    { id: "s10_brew", type: "action", text: "คนชงกาแฟเสิร์ฟใส่ในแก้วกาแฟร้อน" },
+                    { id: "s10_end", type: "terminal", text: "สิ้นสุด" }
+                ],
+                hint: "สูตรชงบาริสต้าระดับโปร: [เริ่มต้น] ➔ [ต้มน้ำ (สีเขียว)] ➔ [ตรวจสอบว่าชอบหวานหรือไม่ (สีเหลือง)] ➔ [ใช่ -> เติมน้ำตาล] และ [ไม่ใช่ -> ข้ามกระบวนการ] (สีเขียว) ➔ [คนชงกาแฟเสิร์ฟใส่ถ้วย (สีเขียว)] ➔ [สิ้นสุด]",
+                validate: (seq) => {
+                    if (seq.length !== 7) return false;
+                    if (seq[0].id !== "s10_start") return false;
+                    if (seq[1].id !== "s10_boil") return false;
+                    if (seq[2].id !== "s10_dec") return false;
+                    const pos4 = seq[3].id;
+                    const pos5 = seq[4].id;
+                    if (!((pos4 === "s10_yes" && pos5 === "s10_no") || (pos4 === "s10_no" && pos5 === "s10_yes"))) return false;
+                    if (seq[5].id !== "s10_brew") return false;
+                    if (seq[6].id !== "s10_end") return false;
+                    return true;
+                }
+            }
+        ];
+
+        // POOL OF 10 CHALLENGE TRIVIA QUIZ QUESTIONS
+        const ALL_QUIZ_QUESTIONS = [
+            {
+                q: "โครงสร้างเงื่อนไข (Selection) ทำหน้าที่อะไร?",
+                opts: [
+                    "ทำซ้ำงานเดิม",
+                    "ให้โปรแกรมตัดสินใจตามสถานการณ์",
+                    "เก็บข้อมูล",
+                    "แสดงผล"
+                ],
+                ans: 1,
+                reason: "โครงสร้างเงื่อนไขใช้เพื่อกำหนดให้โปรแกรมเลือกทำงานตามเงื่อนไขหรือสถานการณ์ที่กำหนดเพื่อแยกสายการทำงาน"
+            },
+            {
+                q: "โครงสร้าง 'IF...THEN' (ไม่มี ELSE) ทำงานเมื่อใด?",
+                opts: [
+                    "ทำเมื่อเงื่อนไขเป็นจริงเท่านั้น ถ้าเท็จข้ามไป",
+                    "ทำทั้งสองกรณี",
+                    "ทำเมื่อเป็นเท็จเท่านั้น",
+                    "ทำตลอดเวลา"
+                ],
+                ans: 0,
+                reason: "IF...THEN เป็นเงื่อนไขทางเดียว หากเงื่อนไขประเมินแล้วเป็นจริงจะทำงานตามที่กำหนด แต่ถ้าเป็นเท็จจะข้ามการทำงานนั้นไปเลย"
+            },
+            {
+                q: "โครงสร้างที่มีหลายเงื่อนไขเรียงต่อกัน เช่น A/B/C/D/F คือ?",
+                opts: [
+                    "IF...THEN",
+                    "IF...ELSE",
+                    "IF...ELIF...ELSE",
+                    "Loop"
+                ],
+                ans: 2,
+                reason: "IF...ELIF...ELSE (หรือ IF-ELSE IF) ใช้สำหรับจัดการกับเงื่อนไขที่มีหลายทางเลือกต่อเนื่องกันเพื่อประเมินทีละระดับ"
+            },
+            {
+                q: "ตัวอย่างเงื่อนไขในชีวิตจริงข้อใดถูกต้อง?",
+                opts: [
+                    "ไฟแดง = ผ่านได้",
+                    "ไฟเขียว = หยุด",
+                    "ไฟแดง = หยุด, ไฟเขียว = ผ่าน",
+                    "ไฟเหลือง = ผ่านได้เสมอ"
+                ],
+                ans: 2,
+                reason: "หากใช้ตรรกะเงื่อนไขสัญญาณไฟจราจรในชีวิตจริง ไฟแดงจะหมายถึงต้องหยุด และไฟเขียวจะหมายถึงผ่านไปได้"
+            },
+            {
+                q: "Flowchart คืออะไร?",
+                opts: [
+                    "ภาษาโปรแกรม",
+                    "แผนภาพแสดงขั้นตอนและการตัดสินใจ",
+                    "ฮาร์ดแวร์",
+                    "Database"
+                ],
+                ans: 1,
+                reason: "ผังงาน (Flowchart) เป็นแผนภาพที่ใช้สัญลักษณ์รูปเรขาคณิตต่างๆ เพื่อแสดงขั้นตอนการแก้ปัญหาและการตัดสินใจของโปรแกรม"
+            },
+            {
+                q: "Nested Condition คืออะไร?",
+                opts: [
+                    "เงื่อนไขเดียว",
+                    "เงื่อนไขที่อยู่ภายในเงื่อนไขอื่น",
+                    "เงื่อนไขที่ทำซ้ำ",
+                    "เงื่อนไขที่ไม่มีค่า"
+                ],
+                ans: 1,
+                reason: "Nested Condition (เงื่อนไขซ้อนเงื่อนไข) คือการนำโครงสร้างเงื่อนไขไปใส่ไว้ภายในโครงสร้างเงื่อนไขอีกชั้นหนึ่ง"
+            },
+            {
+                q: "ใบความรู้แนะนำว่าเงื่อนไขซ้อนไม่ควรเกินกี่ชั้น?",
+                opts: [
+                    "1 ชั้น",
+                    "2 ชั้น",
+                    "3 ชั้น",
+                    "5 ชั้น"
+                ],
+                ans: 2,
+                reason: "การซ้อนเงื่อนไขลึกเกิน 3 ชั้นจะทำให้โค้ดมีความซับซ้อนมากเกินไป (Spaghetti Code) ทำให้อ่านยากและตรวจสอบข้อบกพร่องลำบาก"
+            },
+            {
+                q: "ในระบบล็อคประตู ถ้าใส่รหัสผิดครบ 3 ครั้ง ระบบจะทำอะไร?",
+                opts: [
+                    "เปิดประตู",
+                    "ล็อคระบบ 5 นาที และแจ้งเตือน",
+                    "ลบรหัส",
+                    "เปลี่ยนรหัสใหม่"
+                ],
+                ans: 1,
+                reason: "เป็นมาตรการความปลอดภัยพื้นฐาน หากตรงตามเงื่อนไขที่ใส่รหัสผิดครบกำหนด ระบบจะเข้าสู่กิ่งการทำงานเพื่อระงับการใช้งานและแจ้งเตือนทันที"
+            },
+            {
+                q: "หลักการเขียนเงื่อนไขที่ดีข้อใดไม่ถูกต้อง?",
+                opts: [
+                    "วาด Flowchart ก่อนเขียนโค้ด",
+                    "ตรวจสอบกรณีขอบ (Edge Case)",
+                    "ทดสอบเฉพาะ Yes เท่านั้น",
+                    "ทดสอบทั้ง Yes และ No"
+                ],
+                ans: 2,
+                reason: "การทดสอบโปรแกรมที่ดีต้องจำลองสถานการณ์ทดสอบทั้งกรณีเส้นทางตรรกะที่เป็นจริง (Yes) และกรณีที่เป็นเท็จ (No) เสมอ"
+            },
+            {
+                q: "Edge Case ที่ควรตรวจในโปรแกรมคำนวณคืออะไร?",
+                opts: [
+                    "เฉพาะค่าปกติ",
+                    "ค่าเป็น 0 หรือค่าติดลบ",
+                    "เฉพาะค่ามาก",
+                    "เฉพาะค่ากลาง"
+                ],
+                ans: 1,
+                reason: "กรณีค่าสุดโต่ง เช่น 0 หรือค่าติดลบ ถือเป็นค่าขอบเขต (Edge Case) ที่มักเกิดข้อผิดพลาดในการคำนวณ โปรแกรมเมอร์จึงต้องคอยดักจับไว้"
+            }
+        ];
+
+        // --- INTERACTIVE SCREEN ROUTING ---
+        function showScreen(screenId) {
+            document.getElementById('screen-register').classList.add('hidden');
+            document.getElementById('screen-learning').classList.add('hidden');
+            document.getElementById('screen-sim').classList.add('hidden');
+            document.getElementById('screen-game').classList.add('hidden');
+            document.getElementById('screen-quiz').classList.add('hidden');
+            document.getElementById('screen-summary').classList.add('hidden');
+
+            document.getElementById(screenId).classList.remove('hidden');
+            playSynthSound('click');
+            updateSteppers();
+        }
+
+        // --- BACK NAVIGATION LOGIC ---
+        function goBack() {
+            playSynthSound('click');
+            const learningScreen = document.getElementById('screen-learning');
+            const simScreen = document.getElementById('screen-sim');
+            const gameScreen = document.getElementById('screen-game');
+            const quizScreen = document.getElementById('screen-quiz');
+
+            if (!quizScreen.classList.contains('hidden')) {
+                if (currentQuizIndex > 0) {
+                    currentQuizIndex--;
+                    loadQuizQuestion();
+                    updateSteppers();
+                } else {
+                    showScreen('screen-game');
+                    currentLevelIndex = 4; // Go to last level
+                    loadStageData();
+                }
+            } else if (!gameScreen.classList.contains('hidden')) {
+                if (currentLevelIndex > 0) {
+                    currentLevelIndex--;
+                    loadStageData();
+                    updateSteppers();
+                } else {
+                    showScreen('screen-sim');
+                }
+            } else if (!simScreen.classList.contains('hidden')) {
+                showScreen('screen-learning');
+            } else if (!learningScreen.classList.contains('hidden')) {
+                // Back to registration
+                showScreen('screen-register');
+                document.getElementById('progressStepper').classList.add('hidden');
+                document.getElementById('studentBadge').classList.add('hidden');
+            }
+        }
+
+        // --- STEPPERS PROGRESS HIGHLIGHT ---
+        function updateSteppers() {
+            const steps = ['step-learning', 'step-sim', 'step-g1', 'step-g2', 'step-g3', 'step-g4', 'step-g5', 'step-quiz', 'step-summary'];
+            steps.forEach(id => {
+                const stepEl = document.getElementById(id);
+                if (stepEl) {
+                    const span = stepEl.querySelector('span');
+                    span.className = "w-6 h-6 rounded-full text-slate-600 flex items-center justify-center bg-slate-200 text-[10px]";
+                    stepEl.classList.remove('text-indigo-600');
+                    stepEl.classList.add('text-slate-400');
+                }
+            });
+
+            let activeId = '';
+            const learningScreen = document.getElementById('screen-learning');
+            const simScreen = document.getElementById('screen-sim');
+            const gameScreen = document.getElementById('screen-game');
+            const quizScreen = document.getElementById('screen-quiz');
+            const summaryScreen = document.getElementById('screen-summary');
+
+            if (!learningScreen.classList.contains('hidden')) {
+                activeId = 'step-learning';
+            } else if (!simScreen.classList.contains('hidden')) {
+                activeId = 'step-sim';
+            } else if (!gameScreen.classList.contains('hidden')) {
+                if (currentLevelIndex === 0) activeId = 'step-g1';
+                else if (currentLevelIndex === 1) activeId = 'step-g2';
+                else if (currentLevelIndex === 2) activeId = 'step-g3';
+                else if (currentLevelIndex === 3) activeId = 'step-g4';
+                else if (currentLevelIndex === 4) activeId = 'step-g5';
+            } else if (!quizScreen.classList.contains('hidden')) {
+                activeId = 'step-quiz';
+            } else if (!summaryScreen.classList.contains('hidden')) {
+                activeId = 'step-summary';
+            }
+
+            if (activeId) {
+                const activeEl = document.getElementById(activeId);
+                if (activeEl) {
+                    const span = activeEl.querySelector('span');
+                    span.className = "w-6 h-6 rounded-full text-white flex items-center justify-center bg-indigo-600 shadow-md ring-4 ring-indigo-100 animate-pulse font-bold text-[10px]";
+                    activeEl.classList.remove('text-slate-400');
+                    activeEl.classList.add('text-indigo-600');
+                }
+            }
+        }
+
+        // --- SUBMIT REGISTRATION ---
+        function handleRegistration(e) {
+            e.preventDefault();
+            
+            studentInfo.prefix = document.getElementById('prefix').value;
+            studentInfo.firstname = document.getElementById('firstname').value.trim();
+            studentInfo.lastname = document.getElementById('lastname').value.trim();
+            studentInfo.classroom = document.getElementById('classroom').value.trim();
+            studentInfo.studentNo = document.getElementById('studentNo').value;
+
+            // Header UI badge
+            const badge = document.getElementById('studentBadge');
+            const badgeText = document.getElementById('badgeText');
+            badgeText.textContent = `นักเรียน: ${studentInfo.prefix} ${studentInfo.firstname} ${studentInfo.lastname} ชั้น ${studentInfo.classroom} เลขที่ ${studentInfo.studentNo}`;
+            badge.classList.remove('hidden');
+
+            // Pick 5 random puzzle levels
+            const puzzleIndices = [];
+            while(puzzleIndices.length < 5) {
+                const r = Math.floor(Math.random() * ALL_SCENARIOS.length);
+                if(!puzzleIndices.includes(r)) puzzleIndices.push(r);
+            }
+            selectedScenarios = puzzleIndices.map(i => ALL_SCENARIOS[i]);
+
+            // Pick 10 random quiz questions
+            const quizIndices = [];
+            while(quizIndices.length < 10) {
+                const r = Math.floor(Math.random() * ALL_QUIZ_QUESTIONS.length);
+                if(!quizIndices.includes(r)) quizIndices.push(r);
+            }
+            selectedQuizQuestions = quizIndices.map(i => ALL_QUIZ_QUESTIONS[i]);
+
+            currentLevelIndex = 0;
+            levelScores.fill(0);
+            quizScores.fill(0);
+            updateScoreDisplay();
+
+            document.getElementById('progressStepper').classList.remove('hidden');
+            
+            // Go to learning screen first
+            showScreen('screen-learning');
+        }
+
+        function goToSimulator() {
+            showScreen('screen-sim');
+            runMonsterSimulation();
+        }
+
+        // --- SIMULATOR 1 LOGIC (MONSTER CLASSIFIER) ---
+        function runMonsterSimulation() {
+            const hasWings = document.getElementById('sim-wings').checked;
+            const canFire = document.getElementById('sim-fire').checked;
+            const isGiant = document.getElementById('sim-giant').checked;
+
+            // Reset simulator paths glow visuals
+            const pathStart = document.getElementById('sim-path-start');
+            const pathWings = document.getElementById('sim-path-wings');
+            const pathFire = document.getElementById('sim-path-fire');
+            const pathGiant = document.getElementById('sim-path-giant');
+
+            const resDragon = document.getElementById('sim-res-dragon');
+            const resPhoenix = document.getElementById('sim-res-phoenix');
+            const resGolem = document.getElementById('sim-res-golem');
+            const resSlime = document.getElementById('sim-res-slime');
+
+            const valWingsYes = document.getElementById('sim-val-wings-yes');
+            const valWingsNo = document.getElementById('sim-val-wings-no');
+            const valFireYes = document.getElementById('sim-val-fire-yes');
+            const valFireNo = document.getElementById('sim-val-fire-no');
+            const valGiantYes = document.getElementById('sim-val-giant-yes');
+            const valGiantNo = document.getElementById('sim-val-giant-no');
+
+            // Set all defaults
+            const elements = [pathStart, pathWings, pathFire, pathGiant];
+            elements.forEach(el => {
+                const svgRect = el.querySelector('rect');
+                const svgPoly = el.querySelector('polygon');
+                if(svgRect) {
+                    svgRect.setAttribute('fill', '#eff6ff');
+                    svgRect.setAttribute('stroke', '#3b82f6');
+                }
+                if(svgPoly) {
+                    svgPoly.setAttribute('fill', '#fffbeb');
+                    svgPoly.setAttribute('stroke', '#d97706');
+                }
+                el.className = "transition duration-300 transform scale-90";
+            });
+
+            // Reset outcome processes borders & states
+            const outcomes = [resDragon, resPhoenix, resGolem, resSlime];
+            outcomes.forEach(el => {
+                el.className = "w-20 h-10 border border-slate-300 bg-slate-50 flex items-center justify-center text-center text-[8px] font-bold text-slate-500 shadow-sm transition duration-300";
+            });
+            
+            const txtElements = [valWingsYes, valWingsNo, valFireYes, valFireNo, valGiantYes, valGiantNo];
+            txtElements.forEach(el => el.className = "text-[8px] sm:text-[9px] font-bold text-slate-400 transition duration-300");
+
+            // Glow class utility parameters
+            const highlightWings = () => {
+                pathWings.className = "transition duration-300 transform scale-105 active-glow-wings";
+                const poly = pathWings.querySelector('polygon');
+                poly.setAttribute('fill', '#fef3c7');
+                poly.setAttribute('stroke', '#d97706');
+            };
+
+            // Initial Flow Glow
+            pathStart.className = "transition duration-300 transform scale-105";
+            pathStart.querySelector('rect').setAttribute('fill', '#dbeafe');
+            highlightWings();
+
+            let outcomeTitle = "";
+            let outcomeDesc = "";
+            let outcomeAvatar = "";
+
+            if (hasWings) {
+                valWingsYes.className = "text-[9px] font-extrabold text-indigo-600 scale-105 transition duration-300";
+                pathFire.className = "transition duration-300 transform scale-105";
+                pathFire.querySelector('polygon').setAttribute('fill', '#fef3c7');
+                
+                if (canFire) {
+                    valFireYes.className = "text-[9px] font-extrabold text-indigo-600 scale-105 transition duration-300";
+                    resDragon.className = "w-20 h-10 border-2 border-emerald-500 bg-emerald-50 text-emerald-900 flex items-center justify-center text-center text-[8px] font-extrabold shadow-md transition duration-300 scale-105";
+                    outcomeTitle = "🐲 มังกรไฟโบราณ (Ancient Fire Dragon)";
+                    outcomeDesc = "สิ่งมีชีวิตโบราณขนาดยักษ์โบยบินบนฟ้าชั้นสูง มีเกราะเกล็ดแข็งแกร่งและพ่นไฟเผาทำลายสิ่งกีดขวาง!";
+                    outcomeAvatar = "🐲";
+                } else {
+                    valFireNo.className = "text-[9px] font-extrabold text-indigo-600 scale-105 transition duration-300";
+                    resPhoenix.className = "w-20 h-10 border-2 border-emerald-500 bg-emerald-50 text-emerald-900 flex items-center justify-center text-center text-[8px] font-extrabold shadow-md transition duration-300 scale-105";
+                    outcomeTitle = "🦅 นกฟีนิกซ์เวหา (Grand Phoenix)";
+                    outcomeDesc = "วิหกอมตะสยายปีกสีทองเหนือน่านฟ้า มีพลังรักษาตัวเองและเรียกกระแสลมเวทมนตร์อันเงียบสงบ";
+                    outcomeAvatar = "🦅";
+                }
+            } else {
+                valWingsNo.className = "text-[9px] font-extrabold text-indigo-600 scale-105 transition duration-300";
+                pathGiant.className = "transition duration-300 transform scale-105";
+                pathGiant.querySelector('polygon').setAttribute('fill', '#fef3c7');
+
+                if (isGiant) {
+                    valGiantYes.className = "text-[9px] font-extrabold text-indigo-600 scale-105 transition duration-300";
+                    resGolem.className = "w-20 h-10 border-2 border-emerald-500 bg-emerald-50 text-emerald-900 flex items-center justify-center text-center text-[8px] font-extrabold shadow-md transition duration-300 scale-105";
+                    outcomeTitle = "🪨 โกเลมหินผา (Stone Golem)";
+                    outcomeDesc = "จักรกลศิลาขนาดใหญ่เคลื่อนที่เชื่องช้าบนพื้นดิน แต่มีพละกำลังมหาศาลต้านรับทุกการปะทะ!";
+                    outcomeAvatar = "🪨";
+                } else {
+                    valGiantNo.className = "text-[9px] font-extrabold text-indigo-600 scale-105 transition duration-300";
+                    resSlime.className = "w-20 h-10 border-2 border-emerald-500 bg-emerald-50 text-emerald-900 flex items-center justify-center text-center text-[8px] font-extrabold shadow-md transition duration-300 scale-105";
+                    outcomeTitle = "💧 สไลม์วารีแสนซน (Cute Slime)";
+                    outcomeDesc = "สิ่งมีชีวิตเหนียวหนึบน่ารักขนาดจิ๋ว ปราศจากความดุร้าย ชอบกระโดดไปมาอย่างไร้ทิศทาง";
+                    outcomeAvatar = "💧";
+                }
+            }
+
+            // Render right side output
+            document.getElementById('monster-avatar').textContent = outcomeAvatar;
+            document.getElementById('monster-title').textContent = outcomeTitle;
+            document.getElementById('monster-desc').textContent = outcomeDesc;
+        }
+
+        // --- FLOWCHART PUZZLE GAMES CREATION ---
+        function startFlowchartGameScreen() {
+            showScreen('screen-game');
+            loadStageData();
+        }
+
+        // --- RENDER GEOMETRIC STANDARDIZED SVG FLOWCHART SHAPES ---
+        function generateFlowchartSVGShapeMarkup(block, positionType = 'workspace') {
+            const width = 210;
+            const height = 65;
+            let shapeMarkup = "";
+
+            if (block.type === 'terminal') {
+                shapeMarkup = `
+                    <svg viewBox="0 0 ${width} ${height}" class="w-48 sm:w-52 h-14 sm:h-16 svg-drop-shadow hover:scale-102 transition duration-200">
+                        <rect x="2" y="2" width="${width - 4}" height="${height - 4}" rx="${(height - 4) / 2}" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5" />
+                        <foreignObject x="18" y="4" width="${width - 36}" height="${height - 8}">
+                            <div class="h-full w-full flex items-center justify-center text-center text-[10px] sm:text-xs font-extrabold text-blue-900 select-none px-2 leading-tight">
+                                ${block.text}
+                            </div>
+                        </foreignObject>
+                    </svg>
+                `;
+            } else if (block.type === 'action') {
+                shapeMarkup = `
+                    <svg viewBox="0 0 ${width} ${height}" class="w-48 sm:w-52 h-14 sm:h-16 svg-drop-shadow hover:scale-102 transition duration-200">
+                        <rect x="2" y="2" width="${width - 4}" height="${height - 4}" fill="#ecfdf5" stroke="#059669" stroke-width="2.5" />
+                        <foreignObject x="8" y="4" width="${width - 16}" height="${height - 8}">
+                            <div class="h-full w-full flex items-center justify-center text-center text-[10px] sm:text-xs font-extrabold text-emerald-900 select-none px-2 leading-snug">
+                                ${block.text}
+                            </div>
+                        </foreignObject>
+                    </svg>
+                `;
+            } else if (block.type === 'decision') {
+                const diamondSize = 135;
+                shapeMarkup = `
+                    <svg viewBox="0 0 ${diamondSize} ${diamondSize}" class="w-28 sm:w-32 h-28 sm:h-32 svg-drop-shadow hover:scale-102 transition duration-200">
+                        <polygon points="${diamondSize/2},3.5 ${diamondSize - 3.5},${diamondSize/2} ${diamondSize/2},${diamondSize - 3.5} 3.5,${diamondSize/2}" fill="#fffbeb" stroke="#d97706" stroke-width="2.5" />
+                        <foreignObject x="18" y="18" width="${diamondSize - 36}" height="${diamondSize - 36}">
+                            <div class="h-full w-full flex items-center justify-center text-center text-[9px] sm:text-[11px] font-extrabold text-amber-950 select-none px-1.5 leading-tight">
+                                ${block.text}
+                            </div>
+                        </foreignObject>
+                    </svg>
+                `;
+            } else if (block.type === 'io') {
+                shapeMarkup = `
+                    <svg viewBox="0 0 ${width} ${height}" class="w-48 sm:w-52 h-14 sm:h-16 svg-drop-shadow hover:scale-102 transition duration-200">
+                        <polygon points="26,2 ${width - 2},2 ${width - 26},${height - 2} 2,${height - 2}" fill="#f5f3ff" stroke="#4f46e5" stroke-width="2.5" />
+                        <foreignObject x="24" y="4" width="${width - 48}" height="${height - 8}">
+                            <div class="h-full w-full flex items-center justify-center text-center text-[10px] sm:text-xs font-extrabold text-indigo-950 select-none px-2 leading-snug">
+                                ${block.text}
+                            </div>
+                        </foreignObject>
+                    </svg>
+                `;
+            }
+            return shapeMarkup;
+        }
+
+        // --- STAGE DATA LOADER ENGINE ---
+        function loadStageData() {
+            const scenario = selectedScenarios[currentLevelIndex];
+            
+            // Reset score for this level upon entering/re-entering
+            levelScores[currentLevelIndex] = 0;
+            updateScoreDisplay();
+            
+            stageHintUsed = false;
+            stageAttempts = 0;
+
+            // Write titles
+            document.getElementById('gameStageTitle').textContent = `ด่านที่ ${currentLevelIndex + 1}: ${scenario.title}`;
+            document.getElementById('gameStageDesc').textContent = scenario.description;
+            document.getElementById('currentLevelText').textContent = `${currentLevelIndex + 1} / 5`;
+
+            // Initialize locked state of Hint
+            const btnHint = document.getElementById('btnHint');
+            btnHint.disabled = true;
+            btnHint.className = "text-[10px] sm:text-xs text-slate-400 bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1 shadow-sm opacity-60 cursor-not-allowed";
+            btnHint.innerHTML = `💡 ดูคำใบ้ (ผิดอย่างน้อย 1 ครั้งก่อน)`;
+
+            // Enable Clear Button
+            const btnClear = document.getElementById('btnClear');
+            if (btnClear) {
+                btnClear.disabled = false;
+                btnClear.className = "text-[10px] sm:text-xs text-rose-600 hover:text-rose-700 bg-rose-50 border border-rose-100 px-3 py-1.5 rounded-lg font-medium transition flex items-center gap-1 shadow-sm cursor-pointer opacity-100";
+            }
+
+            currentWorkspaceBlocks = [];
+            currentPoolBlocks = [...scenario.blocks];
+            shuffleArray(currentPoolBlocks);
+
+            // Interface visibility updates
+            document.getElementById('btnNextStage').classList.add('hidden');
+            document.getElementById('btnCheckAnswer').classList.remove('hidden');
+            
+            const feedbackEl = document.getElementById('verificationFeedback');
+            feedbackEl.className = "hidden p-3.5 rounded-xl text-xs sm:text-sm font-semibold border text-center";
+            feedbackEl.textContent = "";
+
+            renderBlockPool();
+            renderFlowchartWorkspace();
+        }
+
+        // --- RENDER POOL AND WORKSPACE BLOCKS ---
+        function renderBlockPool() {
+            const container = document.getElementById('blockPoolContainer');
+            container.innerHTML = "";
+
+            if (currentPoolBlocks.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center text-slate-400 py-6 px-4 border border-dashed border-slate-150 rounded-xl bg-slate-50">
+                        <p class="text-xs font-bold">เลือกสัญลักษณ์ออกไปครบถ้วนแล้ว!</p>
+                        <p class="text-[10px] mt-0.5">คุณสามารถคลิกดึงสัญลักษณ์ในบอร์ดเพื่อสลับคืนได้</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const poolGrid = document.createElement('div');
+            poolGrid.className = "grid grid-cols-1 gap-4 items-center justify-items-center w-full";
+
+            currentPoolBlocks.forEach(block => {
+                const wrapper = document.createElement('div');
+                wrapper.className = "relative group cursor-pointer transform hover:scale-103 transition duration-150";
+                wrapper.innerHTML = generateFlowchartSVGShapeMarkup(block, 'pool');
+                
+                const badge = document.createElement('div');
+                badge.className = "absolute -top-1.5 -right-1.5 bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold w-5 h-5 rounded-full flex items-center justify-center shadow-md text-xs cursor-pointer select-none border border-white z-10";
+                badge.innerHTML = `+`;
+                
+                const addAction = (e) => {
+                    if (e) e.stopPropagation();
+                    if (stageAttempts >= 3) return;
+                    if (currentWorkspaceBlocks.some(b => b.id === block.id)) return;
+
+                    playSynthSound('click');
+                    currentWorkspaceBlocks.push(block);
+                    currentPoolBlocks = currentPoolBlocks.filter(b => b.id !== block.id);
+                    renderBlockPool();
+                    renderFlowchartWorkspace();
+                };
+
+                badge.onclick = (e) => {
+                    e.stopPropagation();
+                    addAction(e);
+                };
+                wrapper.onclick = addAction;
+
+                wrapper.appendChild(badge);
+                poolGrid.appendChild(wrapper);
+            });
+
+            container.appendChild(poolGrid);
+        }
+
+        function renderFlowchartWorkspace() {
+            const container = document.getElementById('flowchartWorkspace');
+            container.innerHTML = "";
+
+            if (currentWorkspaceBlocks.length === 0) {
+                container.innerHTML = `
+                    <div class="flex flex-col items-center justify-center text-slate-400 h-full py-16 w-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-slate-300 stroke-1 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                        <p class="text-xs font-bold text-slate-500">บอร์ดจัดวางและประกอบผังงาน</p>
+                        <p class="text-[10px] text-slate-400 mt-1 max-w-[220px] text-center leading-relaxed">
+                            สัมผัสเลือกบล็อกมาตรฐานจากคลังด้านซ้าย เพื่อนำมาจำลองแผนภูมิทางตรรกะที่ตรงจุด
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Helper to generate the downward arrow element
+            const createDownArrow = () => {
+                const arrowEl = document.createElement('div');
+                arrowEl.className = "flex flex-col items-center -my-1 z-0 relative";
+                arrowEl.innerHTML = `
+                    <svg viewBox="0 0 24 24" class="w-6 h-6 text-indigo-400 fill-current animate-pulse">
+                        <path d="M11 4h2v10h4l-5 5-5-5h4V4z"/>
+                    </svg>
+                `;
+                return arrowEl;
+            };
+
+            // Helper to wrap the block SVG with the remove badge logic
+            const createBlockWrapper = (block, index) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = "relative cursor-pointer transition transform hover:scale-103 z-10 flex flex-col items-center";
+                wrapper.innerHTML = generateFlowchartSVGShapeMarkup(block, 'workspace');
+
+                const badge = document.createElement('div');
+                badge.className = "absolute -top-1.5 -right-1.5 bg-rose-500 hover:bg-rose-600 text-white font-extrabold w-5 h-5 rounded-full flex items-center justify-center shadow-md text-xs cursor-pointer select-none border border-white z-20";
+                badge.innerHTML = `×`;
+
+                const removeAction = (e) => {
+                    if (e) e.stopPropagation();
+                    if (stageAttempts >= 3) return;
+
+                    playSynthSound('click');
+                    if (!currentPoolBlocks.some(b => b.id === block.id)) {
+                        currentPoolBlocks.push(block);
+                    }
+                    currentWorkspaceBlocks.splice(index, 1);
+                    renderBlockPool();
+                    renderFlowchartWorkspace();
+                };
+
+                badge.onclick = (e) => {
+                    e.stopPropagation();
+                    removeAction(e);
+                };
+                wrapper.onclick = removeAction;
+                wrapper.appendChild(badge);
+                return wrapper;
+            };
+
+            // Render Engine loop handling branching structures
+            let i = 0;
+            while (i < currentWorkspaceBlocks.length) {
+                const block = currentWorkspaceBlocks[i];
+
+                if (block.type === 'decision') {
+                    // --- DECISION CLUSTER RENDER (Branching logic WITHOUT Yes/No Text) ---
+                    const decCluster = document.createElement('div');
+                    decCluster.className = "flex flex-col items-center w-full my-1";
+
+                    if (i > 0) {
+                        decCluster.appendChild(createDownArrow());
+                    }
+
+                    // 1. Render the Decision Diamond
+                    decCluster.appendChild(createBlockWrapper(block, i));
+
+                    const branch1 = currentWorkspaceBlocks[i + 1];
+                    const branch2 = currentWorkspaceBlocks[i + 2];
+
+                    if (branch1 || branch2) {
+                        // 2. Render Branches (Split lines only, NO text)
+                        const branchArea = document.createElement('div');
+                        branchArea.className = "w-full max-w-[500px] flex flex-col items-center relative mt-1";
+
+                        // Top split connection lines
+                        const splitLines = document.createElement('div');
+                        splitLines.className = "w-full flex relative h-8 mb-2 z-0";
+                        splitLines.innerHTML = `
+                            <!-- Drop from diamond -->
+                            <div class="absolute top-0 left-1/2 w-0.5 h-4 bg-indigo-300 -translate-x-1/2"></div>
+                            <!-- Horizontal split line -->
+                            <div class="absolute top-4 left-1/4 right-1/4 h-0.5 bg-indigo-300"></div>
+                            <!-- Left line drop -->
+                            ${branch1 ? `<div class="absolute top-4 left-1/4 w-0.5 h-4 bg-indigo-300 -translate-x-1/2"></div>` : ''}
+                            <!-- Right line drop -->
+                            ${branch2 ? `<div class="absolute top-4 right-1/4 w-0.5 h-4 bg-indigo-300 translate-x-1/2"></div>` : ''}
+                        `;
+                        branchArea.appendChild(splitLines);
+
+                        // Columns container
+                        const cols = document.createElement('div');
+                        cols.className = "w-full flex justify-between";
+
+                        // Left Column
+                        const leftCol = document.createElement('div');
+                        leftCol.className = "flex flex-col items-center w-1/2 px-0.5 sm:px-1";
+                        if (branch1) {
+                            const b1Wrapper = createBlockWrapper(branch1, i + 1);
+                            b1Wrapper.classList.add('scale-75', 'sm:scale-95', 'origin-top');
+                            leftCol.appendChild(b1Wrapper);
+                        }
+
+                        // Right Column
+                        const rightCol = document.createElement('div');
+                        rightCol.className = "flex flex-col items-center w-1/2 px-0.5 sm:px-1";
+                        if (branch2) {
+                            const b2Wrapper = createBlockWrapper(branch2, i + 2);
+                            b2Wrapper.classList.add('scale-75', 'sm:scale-95', 'origin-top');
+                            rightCol.appendChild(b2Wrapper);
+                        }
+
+                        cols.appendChild(leftCol);
+                        cols.appendChild(rightCol);
+                        branchArea.appendChild(cols);
+
+                        // 3. Render Bottom Merge Lines
+                        if (currentWorkspaceBlocks[i + 3]) {
+                            const mergeLines = document.createElement('div');
+                            mergeLines.className = "w-full flex relative h-8 -mt-2 z-0";
+                            mergeLines.innerHTML = `
+                                <!-- Left branch extension -->
+                                ${branch1 ? `<div class="absolute top-0 left-1/4 w-0.5 h-6 bg-indigo-300 -translate-x-1/2"></div>` : ''}
+                                <!-- Right branch extension -->
+                                ${branch2 ? `<div class="absolute top-0 right-1/4 w-0.5 h-6 bg-indigo-300 translate-x-1/2"></div>` : ''}
+                                <!-- Bottom horizontal connection -->
+                                <div class="absolute top-6 left-1/4 right-1/4 h-0.5 bg-indigo-300"></div>
+                                <!-- Drop line converging back to center -->
+                                <div class="absolute top-6 left-1/2 w-0.5 h-3 bg-indigo-300 -translate-x-1/2"></div>
+                            `;
+                            branchArea.appendChild(mergeLines);
+                        }
+
+                        decCluster.appendChild(branchArea);
+                        i += 3;
+                    } else {
+                        i++;
+                    }
+                    
+                    container.appendChild(decCluster);
+
+                } else {
+                    // --- NORMAL LINEAR CLUSTER RENDER ---
+                    const linearBlock = document.createElement('div');
+                    linearBlock.className = "flex flex-col items-center w-full my-1";
+                    
+                    if (i > 0) {
+                        linearBlock.appendChild(createDownArrow());
+                    }
+
+                    linearBlock.appendChild(createBlockWrapper(block, i));
+                    container.appendChild(linearBlock);
+                    i++;
+                }
+            }
+        }
+
+        function resetFlowchart() {
+            if (stageAttempts >= 3) return; 
+            playSynthSound('click');
+            const scenario = selectedScenarios[currentLevelIndex];
+            currentWorkspaceBlocks = [];
+            currentPoolBlocks = [...scenario.blocks];
+            shuffleArray(currentPoolBlocks);
+            
+            const feedbackEl = document.getElementById('verificationFeedback');
+            feedbackEl.className = "hidden p-3.5 rounded-xl text-[11px] sm:text-xs font-semibold border text-center";
+            feedbackEl.textContent = "";
+
+            renderBlockPool();
+            renderFlowchartWorkspace();
+        }
+
+        // --- HINT REQUEST SYSTEM ---
+        function showHint() {
+            const feedbackEl = document.getElementById('verificationFeedback');
+            feedbackEl.classList.remove('hidden');
+
+            if (stageAttempts < 1) {
+                playSynthSound('incorrect');
+                feedbackEl.className = "p-3.5 rounded-xl text-xs sm:text-sm font-semibold border text-center bg-rose-50 border-rose-200 text-rose-800";
+                feedbackEl.textContent = "❌ ต้องตรวจสอบคำตอบผิดอย่างน้อย 1 ครั้งก่อน จึงจะสามารถเปิดระบบคำใบ้ได้ครับ!";
+                return;
+            }
+
+            if (stageHintUsed) {
+                playSynthSound('incorrect');
+                feedbackEl.className = "p-3.5 rounded-xl text-xs sm:text-sm font-semibold border text-center bg-rose-50 border-rose-200 text-rose-800";
+                feedbackEl.textContent = "❌ ด่านนี้คุณได้ใช้คำใบ้ไปเรียบร้อยแล้วครับ ลองคิดวิเคราะห์ดูน้า!";
+                return;
+            }
+
+            stageHintUsed = true;
+            playSynthSound('click');
+
+            const btnHint = document.getElementById('btnHint');
+            btnHint.disabled = true;
+            btnHint.className = "text-[10px] sm:text-xs text-slate-400 bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1 shadow-sm opacity-60 cursor-not-allowed";
+            btnHint.innerHTML = `💡 ใช้คำใบ้ของด่านนี้แล้ว`;
+
+            const scenario = selectedScenarios[currentLevelIndex];
+            feedbackEl.className = "p-3.5 rounded-xl text-xs sm:text-sm font-semibold border text-center bg-amber-50 border-amber-200 text-amber-800 shadow-sm transition";
+            feedbackEl.innerHTML = `💡 <b>คำใบ้แนะนำด่านนี้:</b> ${scenario.hint}`;
+        }
+
+        // --- CHECK USER FLOWCHART ANSWER ---
+        function checkCurrentAnswer() {
+            const scenario = selectedScenarios[currentLevelIndex];
+            const isCorrect = scenario.validate(currentWorkspaceBlocks);
+            
+            const feedbackEl = document.getElementById('verificationFeedback');
+            const workspaceEl = document.getElementById('flowchartWorkspace');
+
+            feedbackEl.classList.remove('hidden');
+
+            if (isCorrect) {
+                playSynthSound('success');
+                confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
+
+                levelScores[currentLevelIndex] = 1;
+                updateScoreDisplay();
+
+                feedbackEl.className = "p-3.5 rounded-xl text-xs sm:text-sm font-semibold border text-center bg-emerald-50 border-emerald-200 text-emerald-800 animate-pulse";
+                feedbackEl.innerHTML = `🎉 ยอดเยี่ยมมาก! ตรรกะของผังงานและทิศทางการวางรูปทรงเรขาคณิตตรงกับความต้องการของเงื่อนไขอย่างถูกต้องสมบูรณ์ รับสะสมด่านนี้ 1 คะแนน`;
+
+                document.getElementById('btnCheckAnswer').classList.add('hidden');
+                document.getElementById('btnNextStage').classList.remove('hidden');
+
+                const btnClear = document.getElementById('btnClear');
+                if (btnClear) {
+                    btnClear.disabled = true;
+                    btnClear.className = "text-[10px] sm:text-xs text-slate-400 bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-lg font-medium transition flex items-center gap-1 shadow-sm cursor-not-allowed opacity-50";
+                }
+
+                // Lock Hint Button
+                const btnHint = document.getElementById('btnHint');
+                if (btnHint) {
+                    btnHint.disabled = true;
+                    btnHint.className = "text-[10px] sm:text-xs text-slate-400 bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1 shadow-sm opacity-60 cursor-not-allowed";
+                    btnHint.innerHTML = `💡 ด่านผ่านแล้ว`;
+                }
+
+                workspaceEl.classList.remove('border-slate-200');
+                workspaceEl.classList.add('border-emerald-300', 'bg-emerald-50/50');
+
+            } else {
+                stageAttempts++;
+                
+                // Unlock hint button
+                if (stageAttempts >= 1 && stageAttempts < 3 && !stageHintUsed) {
+                    const btnHint = document.getElementById('btnHint');
+                    btnHint.disabled = false;
+                    btnHint.className = "text-[10px] sm:text-xs text-amber-700 hover:text-amber-800 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1 shadow-sm opacity-100 cursor-pointer animate-bounce";
+                    btnHint.innerHTML = `💡 ดูคำใบ้`;
+                }
+
+                if (stageAttempts >= 3) {
+                    // Fail State
+                    playSynthSound('incorrect');
+                    workspaceEl.classList.add('animate-shake', 'border-rose-300', 'bg-rose-50/50');
+                    setTimeout(() => { workspaceEl.classList.remove('animate-shake'); }, 400);
+
+                    levelScores[currentLevelIndex] = 0;
+                    updateScoreDisplay();
+
+                    feedbackEl.className = "p-3.5 rounded-xl text-xs sm:text-sm font-semibold border text-center bg-rose-50 border-rose-200 text-rose-800 animate-pulse";
+                    feedbackEl.innerHTML = `❌ ตรวจคำตอบผิดครบ 3 ครั้งแล้ว! ด่านนี้คุณจะไม่ได้คะแนนสะสม (ได้รับ 0 คะแนน)<br><span class="text-xs font-normal mt-1 block text-rose-700">💡 <b>ระบบแสดงเฉลยผังงานที่ถูกต้องด้านล่างแล้ว</b> ลองวิเคราะห์ตรรกะเพื่อทำความเข้าใจ แล้วกดข้ามไปด่านต่อไปได้เลยครับ</span>`;
+
+                    document.getElementById('btnCheckAnswer').classList.add('hidden');
+                    document.getElementById('btnNextStage').classList.remove('hidden');
+
+                    const btnClear = document.getElementById('btnClear');
+                    if (btnClear) {
+                        btnClear.disabled = true;
+                        btnClear.className = "text-[10px] sm:text-xs text-slate-400 bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-lg font-medium transition flex items-center gap-1 shadow-sm cursor-not-allowed opacity-50";
+                    }
+
+                    const btnHint = document.getElementById('btnHint');
+                    if (btnHint) {
+                        btnHint.disabled = true;
+                        btnHint.className = "text-[10px] sm:text-xs text-slate-400 bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1 shadow-sm opacity-60 cursor-not-allowed";
+                        btnHint.innerHTML = `💡 ใช้คำใบ้ไม่ได้แล้ว (ด่านจบแล้ว)`;
+                    }
+
+                    // Force correct scenario layout
+                    currentWorkspaceBlocks = [...scenario.blocks];
+                    currentPoolBlocks = [];
+                    renderBlockPool();
+                    renderFlowchartWorkspace();
+
+                    workspaceEl.classList.remove('border-slate-200');
+                    workspaceEl.classList.add('border-rose-300', 'bg-rose-50/50');
+
+                } else {
+                    // Try Again State
+                    playSynthSound('incorrect');
+                    workspaceEl.classList.add('animate-shake', 'border-rose-300', 'bg-rose-50/50');
+                    setTimeout(() => { 
+                        workspaceEl.classList.remove('animate-shake'); 
+                        workspaceEl.classList.remove('border-rose-300', 'bg-rose-50/50');
+                    }, 400);
+
+                    feedbackEl.className = "p-3.5 rounded-xl text-xs sm:text-sm font-semibold border text-center bg-rose-50 border-rose-200 text-rose-800";
+                    
+                    if (currentWorkspaceBlocks.length !== scenario.blocks.length) {
+                        feedbackEl.innerHTML = `❌ ตรรกะผิดพลาด! ตรวจเช็กดูสิว่าใช้รูปสัญลักษณ์ครบถ้วนตามความต้องการของโจทย์หรือยังครับ? (เหลือโอกาสแก้ตัวอีก ${3 - stageAttempts} ครั้ง)<br><span class="text-xs font-bold text-indigo-700 mt-1 block">💡 ปุ่มคำใบ้ได้รับการปลดล็อกแล้ว! คุณสามารถกดปุ่ม "ดูคำใบ้" เพื่อช่วยนำทางได้</span>`;
+                    } else {
+                        feedbackEl.innerHTML = `❌ ลำดับความสัมพันธ์ของเงื่อนไข/กระบวนการทำงานยังไม่สอดคล้องกับโครงสร้างคำถาม ลองเรียงใหม่อีกรอบนะครับ (เหลือโอกาสแก้ตัวอีก ${3 - stageAttempts} ครั้ง)<br><span class="text-xs font-bold text-indigo-700 mt-1 block">💡 ปุ่มคำใบ้ได้รับการปลดล็อกแล้ว! คุณสามารถกดปุ่ม "ดูคำใบ้" เพื่อช่วยนำทางได้</span>`;
+                    }
+                }
+            }
+        }
+
+        // --- GO NEXT LEVEL OR ADVANCE TO QUIZ ---
+        function goToNextLevel() {
+            playSynthSound('click');
+            const workspaceEl = document.getElementById('flowchartWorkspace');
+            workspaceEl.classList.remove('border-emerald-300', 'bg-emerald-50/50', 'border-rose-300', 'bg-rose-50/50');
+            workspaceEl.classList.add('border-slate-200');
+
+            if (currentLevelIndex < 4) { 
+                currentLevelIndex++;
+                loadStageData();
+                updateSteppers();
+            } else {
+                startQuizScreen();
+            }
+        }
+
+        // --- SCREEN 4: TRIVIA MULTIPLE CHOICE QUIZ ---
+        let currentQuizIndex = 0;
+
+        function startQuizScreen() {
+            currentQuizIndex = 0;
+            showScreen('screen-quiz');
+            loadQuizQuestion();
+        }
+
+        function loadQuizQuestion() {
+            const questionData = selectedQuizQuestions[currentQuizIndex];
+            
+            // Wipe score for re-entered question if navigating back
+            quizScores[currentQuizIndex] = 0;
+            updateScoreDisplay();
+            
+            document.getElementById('quizIndexText').textContent = `${currentQuizIndex + 1} / 10`;
+            document.getElementById('quizQuestionText').textContent = `ข้อที่ ${currentQuizIndex + 1}: ${questionData.q}`;
+
+            document.getElementById('btnNextQuiz').classList.add('hidden');
+            document.getElementById('quizFeedbackPanel').classList.add('hidden');
+
+            const optionsContainer = document.getElementById('quizOptionsContainer');
+            optionsContainer.innerHTML = "";
+
+            questionData.opts.forEach((option, idx) => {
+                const optBtn = document.createElement('button');
+                optBtn.className = "w-full text-left p-4 rounded-xl border-2 border-slate-150 bg-white hover:bg-slate-50 transition transform active:scale-[0.99] font-medium text-slate-700 text-xs sm:text-sm flex items-center justify-between";
+                optBtn.innerHTML = `
+                    <span><b>${idx + 1}.</b> ${option}</span>
+                    <span class="w-5 h-5 rounded-full border border-slate-300 inline-block flex-shrink-0"></span>
+                `;
+                optBtn.onclick = () => handleQuizSubmission(idx, optBtn);
+                optionsContainer.appendChild(optBtn);
+            });
+        }
+
+        function handleQuizSubmission(chosenIdx, clickedBtn) {
+            const questionData = selectedQuizQuestions[currentQuizIndex];
+            const optionsContainer = document.getElementById('quizOptionsContainer');
+            const btns = optionsContainer.querySelectorAll('button');
+
+            btns.forEach(btn => btn.disabled = true);
+
+            const feedbackPanel = document.getElementById('quizFeedbackPanel');
+            const feedbackIcon = document.getElementById('quizFeedbackIcon');
+            const feedbackTitle = document.getElementById('quizFeedbackTitle');
+            const feedbackDesc = document.getElementById('quizFeedbackDesc');
+
+            feedbackPanel.classList.remove('hidden');
+
+            if (chosenIdx === questionData.ans) {
+                // Correct answer - Give exactly 0.5 point per quiz
+                playSynthSound('success');
+                confetti({ particleCount: 40, spread: 40 });
+                
+                quizScores[currentQuizIndex] = 0.5;
+                updateScoreDisplay();
+
+                clickedBtn.className = "w-full text-left p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50 font-bold text-emerald-900 text-xs sm:text-sm flex items-center justify-between";
+                clickedBtn.querySelector('span:last-child').className = "w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center text-white text-[10px]";
+                clickedBtn.querySelector('span:last-child').innerHTML = "✓";
+
+                feedbackPanel.className = "p-4 rounded-xl text-xs sm:text-sm font-semibold border flex items-start gap-3 bg-emerald-50 border-emerald-200 text-emerald-800 animate-pulse";
+                feedbackIcon.innerHTML = `🎯`;
+                feedbackTitle.textContent = `เก่งมาก... ตอบได้ถูกต้อง! (+0.5 คะแนน)`;
+            } else {
+                // Wrong answer
+                playSynthSound('incorrect');
+                
+                quizScores[currentQuizIndex] = 0;
+                updateScoreDisplay();
+
+                clickedBtn.className = "w-full text-left p-4 rounded-xl border-2 border-rose-500 bg-rose-50 font-bold text-rose-900 text-xs sm:text-sm flex items-center justify-between";
+                clickedBtn.querySelector('span:last-child').className = "w-5 h-5 rounded-full bg-rose-500 flex items-center justify-center text-white text-[10px]";
+                clickedBtn.querySelector('span:last-child').innerHTML = "✗";
+
+                const correctBtn = btns[questionData.ans];
+                correctBtn.className = "w-full text-left p-4 rounded-xl border-2 border-emerald-300 bg-emerald-50/30 text-emerald-900 text-xs sm:text-sm flex items-center justify-between";
+
+                feedbackPanel.className = "p-4 rounded-xl text-xs sm:text-sm font-semibold border flex items-start gap-3 bg-rose-50 border-rose-200 text-rose-800";
+                feedbackIcon.innerHTML = `💡`;
+                feedbackTitle.textContent = "ยังไม่ถูกต้องน้า ลองวิเคราะห์แนวคิดนี้ดู";
+            }
+
+            feedbackDesc.textContent = questionData.reason;
+            document.getElementById('btnNextQuiz').classList.remove('hidden');
+        }
+
+        function advanceQuiz() {
+            playSynthSound('click');
+            if (currentQuizIndex < 9) { 
+                currentQuizIndex++;
+                loadQuizQuestion();
+                updateSteppers();
+            } else {
+                loadSummaryData();
+            }
+        }
+
+        // --- FINAL SUMMARY AND SCORE LOGGING ---
+        function loadSummaryData() {
+            const overallScore = puzzleTotalScore + quizTotalScore; // Puzzle (Max 5) + Quiz (Max 5) = Overall 10 Max Points
+
+            // Render stats
+            document.getElementById('summaryPuzzleScore').textContent = `${puzzleTotalScore} / 5`;
+            document.getElementById('summaryQuizScore').textContent = `${quizTotalScore} / 5`;
+            document.getElementById('summaryTotalScore').textContent = `${overallScore} / 10`;
+            document.getElementById('finalScoreDisplay').textContent = `${overallScore} / 10 คะแนน`;
+            document.getElementById('finalNameDisplay').textContent = `${studentInfo.prefix}${studentInfo.firstname} ${studentInfo.lastname} ชั้น ${studentInfo.classroom} เลขที่ ${studentInfo.studentNo}`;
+            
+            showScreen('screen-summary');
+            updateSteppers();
+
+            // Trigger Google Spreadsheet transmission automatically
+            handleSubmitScores();
+
+            // Fireworks celebration
+            const duration = 2.5 * 1000;
+            const end = Date.now() + duration;
+            (function frame() {
+                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 } });
+                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 } });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+        }
+
+        // --- TRANSMIT DATA INTO THE SPREADSHEET CLOUD ---
+        async function handleSubmitScores() {
+            playSynthSound('click');
+            const toast = document.getElementById('summaryToast');
+
+            toast.classList.remove('hidden', 'bg-blue-50', 'border-blue-200', 'text-blue-800', 'bg-emerald-50', 'border-emerald-200', 'text-emerald-800', 'bg-rose-50', 'border-rose-200', 'text-rose-800');
+            toast.className = "p-4 rounded-xl border text-center text-xs sm:text-sm font-semibold bg-amber-50 border-amber-200 text-amber-800";
+            toast.textContent = "📡 ระบบออโต้ส่งผลลัพธ์: กำลังเชื่อมต่อคลาวด์ชีทและบันทึกคะแนนสะสมโดยอัตโนมัติ...";
+
+            const payload = {
+                salutation: studentInfo.prefix,
+                firstname: studentInfo.firstname,
+                lastname: studentInfo.lastname,
+                classroom: studentInfo.classroom,
+                studentNo: parseInt(studentInfo.studentNo, 10),
+                score: puzzleTotalScore + quizTotalScore,
+                timestamp: new Date().toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' })
+            };
+
+            const maxRetries = 5;
+            let currentDelay = 1000;
+
+            for (let attempt = 1; attempt <= maxRetries; attempt++) {
+                try {
+                    await fetch(APPS_SCRIPT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    // Success trigger output text
+                    toast.className = "p-4 rounded-xl border text-center text-xs sm:text-sm font-semibold bg-emerald-50 border-emerald-200 text-emerald-800";
+                    toast.innerHTML = `
+                        <p class="font-bold">🎉 บันทึกผลคะแนนและจัดเก็บข้อมูลเข้า Google Sheet เสร็จสิ้นแล้ว! 🎉</p>
+                        <p class="text-[10px] text-slate-500 font-normal mt-0.5">จัดส่งแฟ้มคะแนนดิจิทัลของนักเรียน (คะแนนสะสม: ${payload.score}/10 คะแนน) ลงคลังของอาจารย์เรียบร้อยแล้วครับ!</p>
+                    `;
+                    playSynthSound('success');
+                    return;
+
+                } catch (error) {
+                    console.error(`Attempt ${attempt} posting scores failed:`, error);
+                    if (attempt === maxRetries) {
+                        toast.className = "p-4 rounded-xl border text-center text-xs sm:text-sm font-semibold bg-rose-50 border-rose-200 text-rose-800";
+                        toast.textContent = `❌ การบันทึกอัตโนมัติล้มเหลวครบ 5 ครั้ง! โปรดตรวจความถูกต้องของการเชื่อมต่อเครือข่ายอินเทอร์เน็ตของระบบ`;
+                        playSynthSound('incorrect');
+                    } else {
+                        await new Promise(res => setTimeout(res, currentDelay));
+                        currentDelay *= 2;
+                    }
+                }
+            }
+        }
+
+        // --- FULL RESTART ---
+        function restartEntireLab() {
+            const puzzleIndices = [];
+            while(puzzleIndices.length < 5) {
+                const r = Math.floor(Math.random() * ALL_SCENARIOS.length);
+                if(!puzzleIndices.includes(r)) puzzleIndices.push(r);
+            }
+            selectedScenarios = puzzleIndices.map(i => ALL_SCENARIOS[i]);
+
+            const quizIndices = [];
+            while(quizIndices.length < 10) {
+                const r = Math.floor(Math.random() * ALL_QUIZ_QUESTIONS.length);
+                if(!quizIndices.includes(r)) quizIndices.push(r);
+            }
+            selectedQuizQuestions = quizIndices.map(i => ALL_QUIZ_QUESTIONS[i]);
+
+            currentLevelIndex = 0;
+            levelScores.fill(0);
+            quizScores.fill(0);
+            updateScoreDisplay();
+
+            showScreen('screen-learning');
+        }
+
+        // --- SHUFFLE ARRAY HELPER ---
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+    </script>
+</body>
+</html>
