@@ -1677,13 +1677,18 @@
                 return wrapper;
             };
 
+            // Analyze current scenario for branch layout rule
+            const scenario = selectedScenarios[currentLevelIndex];
+            const choiceCount = scenario.blocks.filter(b => b.text.includes("ใช่ ->") || b.text.includes("ไม่ใช่ ->")).length;
+            const isTwoBranchStage = choiceCount >= 2;
+
             // Render Engine loop handling branching structures
             let i = 0;
             while (i < currentWorkspaceBlocks.length) {
                 const block = currentWorkspaceBlocks[i];
 
                 if (block.type === 'decision') {
-                    // --- DECISION CLUSTER RENDER (Branching logic WITHOUT Yes/No Text) ---
+                    // --- DECISION CLUSTER RENDER ---
                     const decCluster = document.createElement('div');
                     decCluster.className = "flex flex-col items-center w-full my-1";
 
@@ -1694,79 +1699,121 @@
                     // 1. Render the Decision Diamond
                     decCluster.appendChild(createBlockWrapper(block, i));
 
-                    const branch1 = currentWorkspaceBlocks[i + 1];
-                    const branch2 = currentWorkspaceBlocks[i + 2];
+                    const b1 = currentWorkspaceBlocks[i + 1];
+                    const b2 = currentWorkspaceBlocks[i + 2];
 
-                    if (branch1 || branch2) {
-                        // 2. Render Branches (Split lines only, NO text)
-                        const branchArea = document.createElement('div');
-                        branchArea.className = "w-full max-w-[500px] flex flex-col items-center relative mt-1";
+                    if (isTwoBranchStage) {
+                        // 2-Branch Layout (Split Left/Right)
+                        let branch1 = null;
+                        let branch2 = null;
+                        let branchesTaken = 0;
 
-                        // Top split connection lines
-                        const splitLines = document.createElement('div');
-                        splitLines.className = "w-full flex relative h-8 mb-2 z-0";
-                        splitLines.innerHTML = `
-                            <!-- Drop from diamond -->
-                            <div class="absolute top-0 left-1/2 w-0.5 h-4 bg-indigo-300 -translate-x-1/2"></div>
-                            <!-- Horizontal split line -->
-                            <div class="absolute top-4 left-1/4 right-1/4 h-0.5 bg-indigo-300"></div>
-                            <!-- Left line drop -->
-                            ${branch1 ? `<div class="absolute top-4 left-1/4 w-0.5 h-4 bg-indigo-300 -translate-x-1/2"></div>` : ''}
-                            <!-- Right line drop -->
-                            ${branch2 ? `<div class="absolute top-4 right-1/4 w-0.5 h-4 bg-indigo-300 translate-x-1/2"></div>` : ''}
-                        `;
-                        branchArea.appendChild(splitLines);
-
-                        // Columns container
-                        const cols = document.createElement('div');
-                        cols.className = "w-full flex justify-between";
-
-                        // Left Column
-                        const leftCol = document.createElement('div');
-                        leftCol.className = "flex flex-col items-center w-1/2 px-0.5 sm:px-1";
-                        if (branch1) {
-                            const b1Wrapper = createBlockWrapper(branch1, i + 1);
-                            b1Wrapper.classList.add('scale-75', 'sm:scale-95', 'origin-top');
-                            leftCol.appendChild(b1Wrapper);
+                        // Rule: Terminal blocks cannot be inside choice branches
+                        if (b1 && b1.type !== 'terminal') {
+                            branch1 = b1;
+                            branchesTaken++;
+                            if (b2 && b2.type !== 'terminal') {
+                                branch2 = b2;
+                                branchesTaken++;
+                            }
                         }
 
-                        // Right Column
-                        const rightCol = document.createElement('div');
-                        rightCol.className = "flex flex-col items-center w-1/2 px-0.5 sm:px-1";
-                        if (branch2) {
-                            const b2Wrapper = createBlockWrapper(branch2, i + 2);
-                            b2Wrapper.classList.add('scale-75', 'sm:scale-95', 'origin-top');
-                            rightCol.appendChild(b2Wrapper);
-                        }
+                        if (branchesTaken > 0) {
+                            const branchArea = document.createElement('div');
+                            branchArea.className = "w-full max-w-[500px] flex flex-col items-center relative mt-1";
 
-                        cols.appendChild(leftCol);
-                        cols.appendChild(rightCol);
-                        branchArea.appendChild(cols);
-
-                        // 3. Render Bottom Merge Lines
-                        if (currentWorkspaceBlocks[i + 3]) {
-                            const mergeLines = document.createElement('div');
-                            mergeLines.className = "w-full flex relative h-8 -mt-2 z-0";
-                            mergeLines.innerHTML = `
-                                <!-- Left branch extension -->
-                                ${branch1 ? `<div class="absolute top-0 left-1/4 w-0.5 h-6 bg-indigo-300 -translate-x-1/2"></div>` : ''}
-                                <!-- Right branch extension -->
-                                ${branch2 ? `<div class="absolute top-0 right-1/4 w-0.5 h-6 bg-indigo-300 translate-x-1/2"></div>` : ''}
-                                <!-- Bottom horizontal connection -->
-                                <div class="absolute top-6 left-1/4 right-1/4 h-0.5 bg-indigo-300"></div>
-                                <!-- Drop line converging back to center -->
-                                <div class="absolute top-6 left-1/2 w-0.5 h-3 bg-indigo-300 -translate-x-1/2"></div>
+                            // Top split connection lines
+                            const splitLines = document.createElement('div');
+                            splitLines.className = "w-full flex relative h-8 mb-2 z-0";
+                            splitLines.innerHTML = `
+                                <!-- Drop from diamond -->
+                                <div class="absolute top-0 left-1/2 w-0.5 h-4 bg-indigo-300 -translate-x-1/2"></div>
+                                <!-- Horizontal split line -->
+                                <div class="absolute top-4 left-1/4 right-1/4 h-0.5 bg-indigo-300"></div>
+                                <!-- Left line drop -->
+                                ${branch1 ? `<div class="absolute top-4 left-1/4 w-0.5 h-4 bg-indigo-300 -translate-x-1/2"></div>` : ''}
+                                <!-- Right line drop -->
+                                ${branch2 ? `<div class="absolute top-4 right-1/4 w-0.5 h-4 bg-indigo-300 translate-x-1/2"></div>` : ''}
                             `;
-                            branchArea.appendChild(mergeLines);
+                            branchArea.appendChild(splitLines);
+
+                            // Columns container
+                            const cols = document.createElement('div');
+                            cols.className = "w-full flex justify-between";
+
+                            // Left Column
+                            const leftCol = document.createElement('div');
+                            leftCol.className = "flex flex-col items-center w-1/2 px-0.5 sm:px-1";
+                            if (branch1) {
+                                const b1Wrapper = createBlockWrapper(branch1, i + 1);
+                                b1Wrapper.classList.add('scale-75', 'sm:scale-95', 'origin-top');
+                                leftCol.appendChild(b1Wrapper);
+                            }
+
+                            // Right Column
+                            const rightCol = document.createElement('div');
+                            rightCol.className = "flex flex-col items-center w-1/2 px-0.5 sm:px-1";
+                            if (branch2) {
+                                const b2Wrapper = createBlockWrapper(branch2, i + 2);
+                                b2Wrapper.classList.add('scale-75', 'sm:scale-95', 'origin-top');
+                                rightCol.appendChild(b2Wrapper);
+                            }
+
+                            cols.appendChild(leftCol);
+                            cols.appendChild(rightCol);
+                            branchArea.appendChild(cols);
+
+                            // 3. Render Bottom Merge Lines
+                            if (currentWorkspaceBlocks[i + 1 + branchesTaken]) {
+                                const mergeLines = document.createElement('div');
+                                mergeLines.className = "w-full flex relative h-8 -mt-2 z-0";
+                                mergeLines.innerHTML = `
+                                    <!-- Left branch extension -->
+                                    ${branch1 ? `<div class="absolute top-0 left-1/4 w-0.5 h-6 bg-indigo-300 -translate-x-1/2"></div>` : ''}
+                                    <!-- Right branch extension -->
+                                    ${branch2 ? `<div class="absolute top-0 right-1/4 w-0.5 h-6 bg-indigo-300 translate-x-1/2"></div>` : ''}
+                                    <!-- Bottom horizontal connection -->
+                                    <div class="absolute top-6 left-1/4 right-1/4 h-0.5 bg-indigo-300"></div>
+                                    <!-- Drop line converging back to center -->
+                                    <div class="absolute top-6 left-1/2 w-0.5 h-3 bg-indigo-300 -translate-x-1/2"></div>
+                                `;
+                                branchArea.appendChild(mergeLines);
+                            }
+
+                            decCluster.appendChild(branchArea);
+                            i += 1 + branchesTaken;
+                        } else {
+                            i++;
+                        }
+                        
+                        container.appendChild(decCluster);
+
+                    } else {
+                        // 1-Branch Layout (Single Straight Path)
+                        let branch1 = null;
+                        // Rule: Terminal blocks cannot be inside choice branches
+                        if (b1 && b1.type !== 'terminal') {
+                            branch1 = b1;
                         }
 
-                        decCluster.appendChild(branchArea);
-                        i += 3;
-                    } else {
-                        i++;
+                        if (branch1) {
+                            const singleBranchArea = document.createElement('div');
+                            singleBranchArea.className = "flex flex-col items-center w-full";
+                            
+                            // Simple vertical arrow
+                            singleBranchArea.appendChild(createDownArrow());
+
+                            const bWrapper = createBlockWrapper(branch1, i + 1);
+                            singleBranchArea.appendChild(bWrapper);
+
+                            decCluster.appendChild(singleBranchArea);
+                            i += 2;
+                        } else {
+                            i++;
+                        }
+                        
+                        container.appendChild(decCluster);
                     }
-                    
-                    container.appendChild(decCluster);
 
                 } else {
                     // --- NORMAL LINEAR CLUSTER RENDER ---
