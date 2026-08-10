@@ -13,6 +13,7 @@
 # --- Browser game portals ---
 0.0.0.0 poki.com
 0.0.0.0 th.y8.com
+0.0.0.0 www.friv.com
 # ===== END SCHOOL GAME BLOCKLIST =====
 
 # Shared hosting warning:
