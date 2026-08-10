@@ -99,6 +99,7 @@
 0.0.0.0 www.unblockedgames76.com
 0.0.0.0 th.y8.com
 0.0.0.0 y8.com
+0.0.0.0 yandex.com
 
 # --- Roblox ---
 0.0.0.0 roblox.com
