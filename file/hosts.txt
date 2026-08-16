@@ -241,6 +241,9 @@
 0.0.0.0 textures.minecraft.net
 0.0.0.0 tlauncher.org
 0.0.0.0 www.tlauncher.org
+0.0.0.0 auth.tlauncher.org
+0.0.0.0 repo.tlauncher.org
+0.0.0.0 mps.tlauncher.org
 
 # --- Garena, Free Fire and mobile game platforms ---
 0.0.0.0 garena.com
@@ -384,8 +387,6 @@
 0.0.0.0 www.twitch.tv
 0.0.0.0 kick.com
 0.0.0.0 www.kick.com
-0.0.0.0 tiktok.com
-0.0.0.0 www.tiktok.com
 0.0.0.0 ome.tv
 0.0.0.0 www.ome.tv
 0.0.0.0 omegle.fun
@@ -394,6 +395,18 @@
 0.0.0.0 www.omegle.com
 0.0.0.0 omegleweb.io
 0.0.0.0 www.omegleweb.io
+
+# --- Emulator ---
+0.0.0.0 bluestacks.com
+0.0.0.0 www.bluestacks.com
+0.0.0.0 ldplayer.net
+0.0.0.0 th.ldplayer.net
+0.0.0.0 www.ldplayer.net
+0.0.0.0 www.mumuplayer.com
+0.0.0.0 mumuplayer.com
+0.0.0.0 bignox.com
+0.0.0.0 www.bignox.com
+0.0.0.0 th.bignox.com
 
 # ===== END SCHOOL GAME BLOCKLIST =====
 
