@@ -1,3 +1,19 @@
+# GAME BLOCKLIST FOR SCHOOL COMPUTERS
+# Generated: 2026-08-04
+# Add these lines to: C:\Windows\System32\drivers\etc\hosts
+# Run the text editor as Administrator.
+# This list blocks exact hostnames only; the hosts file does not support wildcards.
+# Keep existing custom entries above this section.
+
+127.0.0.1 localhost
+::1 localhost
+
+# ===== BEGIN SCHOOL GAME BLOCKLIST =====
+
 poki.com
 th.y8.com
 www.friv.com
+
+# Shared hosting warning:
+# Games hosted under sites.google.com, github.io, replit.app, or similar
+# cannot be selectively blocked with a hosts file without blocking the entire service.
