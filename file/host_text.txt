@@ -14,6 +14,8 @@ poki.com
 th.y8.com
 www.friv.com
 
+# ===== END SCHOOL GAME BLOCKLIST =====
+
 # Shared hosting warning:
 # Games hosted under sites.google.com, github.io, replit.app, or similar
 # cannot be selectively blocked with a hosts file without blocking the entire service.
